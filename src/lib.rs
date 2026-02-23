@@ -1,7 +1,6 @@
-use getrandom::getrandom;
-use rand::rngs::SmallRng;
 use rand::Rng;
-use rand::SeedableRng;
+mod rng_utils;
+use rng_utils::seeded_small_rng;
 
 pub fn run_automaton(
     rule: u8,
@@ -9,9 +8,7 @@ pub fn run_automaton(
     width: usize,
     generations: usize,
 ) -> Vec<Vec<u8>> {
-    let mut seed = [0u8; 32];
-    getrandom(&mut seed).expect("Failed to get randomness from OS");
-    let mut rng = SmallRng::from_seed(seed);
+    let mut rng = seeded_small_rng();
 
     let mut current = vec![0u8; width];
     if let Some(p) = random_distribution {

@@ -1,0 +1,22 @@
+body {
+  font-family: sans-serif;
+  margin: 2em;
+  background: #222;
+  color: #eee;
+}
+form {
+  margin-bottom: 1em;
+}
+canvas {
+  border: 1px solid #888;
+  background: #111;
+}
+label {
+  display: block;
+  margin: 0.5em 0;
+}
+button {
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  font-size: 1em;
+}
