@@ -1,13 +1,15 @@
 use rand::Rng;
+use wasm_bindgen::prelude::*;
 mod rng_utils;
 use rng_utils::seeded_small_rng;
 
+#[wasm_bindgen]
 pub fn run_automaton(
     rule: u8,
     random_distribution: Option<f64>,
     width: usize,
     generations: usize,
-) -> Vec<Vec<u8>> {
+) -> Vec<u8> {
     let mut rng = seeded_small_rng();
 
     let mut current = vec![0u8; width];
@@ -24,8 +26,8 @@ pub fn run_automaton(
     } else {
         current[width / 2] = 1;
     }
-    let mut generations_vec = Vec::with_capacity(generations);
-    generations_vec.push(current.clone());
+    let mut generations_vec = Vec::with_capacity(generations * width);
+    generations_vec.extend_from_slice(&current);
     for _ in 1..generations {
         let mut next = vec![0u8; width];
         for i in 0..width {
@@ -35,8 +37,9 @@ pub fn run_automaton(
             let idx = (left << 2) | (center << 1) | right;
             next[i] = (rule >> idx) & 1;
         }
-        generations_vec.push(next.clone());
+        generations_vec.extend_from_slice(&next);
         current = next;
     }
     generations_vec
 }
+

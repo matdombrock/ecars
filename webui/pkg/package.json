@@ -1,0 +1,15 @@
+{
+  "name": "ca",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "ca_bg.wasm",
+    "ca.js",
+    "ca.d.ts"
+  ],
+  "main": "ca.js",
+  "types": "ca.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}

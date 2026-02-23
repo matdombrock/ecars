@@ -75,8 +75,11 @@ fn main() {
         "none" => None,
         s => Some(s.parse().expect("Invalid random_distribution")),
     };
-    let generations_vec =
-        run_automaton(args.rule, random_distribution, args.width, args.generations);
+    let flat_vec = run_automaton(args.rule, random_distribution, args.width, args.generations);
+    let generations_vec: Vec<Vec<u8>> = flat_vec
+        .chunks(args.width)
+        .map(|chunk| chunk.to_vec())
+        .collect();
 
     if let Some(output_path) = args.output {
         let bg_from = parse_hex_color(&args.bg_from);
