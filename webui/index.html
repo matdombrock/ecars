@@ -13,6 +13,15 @@
     <label>Random Distribution (0.0-1.0, blank for center): <input type="number" step="0.01" id="random_distribution"></label><br>
     <label>Width: <input type="number" id="width" min="1" max="512" value="64"></label><br>
     <label>Generations: <input type="number" id="generations" min="1" max="256" value="32"></label><br>
+    <label>Scale: <input type="number" id="scale" min="1" max="20" value="1"></label><br>
+    <label>Circle mode: <input type="checkbox" id="circles"></label><br>
+    <fieldset>
+      <legend>Colors</legend>
+      <label>Background from: <input type="color" id="bg_from" value="#ffaaff"></label><br>
+      <label>Background to: <input type="color" id="bg_to" value="#000000"></label><br>
+      <label>Foreground from: <input type="color" id="fg_from" value="#000000"></label><br>
+      <label>Foreground to: <input type="color" id="fg_to" value="#aaffff"></label><br>
+    </fieldset>
     <button type="submit">Generate</button>
   </form>
   <canvas id="output" width="512" height="256"></canvas>

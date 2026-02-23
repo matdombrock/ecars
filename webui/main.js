@@ -16,18 +16,59 @@ async function main() {
     if (randomDistStr !== '') {
       random_distribution = parseFloat(randomDistStr);
     }
+    const scale = parseInt(document.getElementById('scale').value, 10);
+    const circles = document.getElementById('circles').checked;
+    const bg_from = document.getElementById('bg_from').value;
+    const bg_to = document.getElementById('bg_to').value;
+    const fg_from = document.getElementById('fg_from').value;
+    const fg_to = document.getElementById('fg_to').value;
+
     // Call wasm
     const result = run_automaton(rule, random_distribution, width, generations);
-    // Draw result
+
+    // Always resize canvas to fit the full automaton
+    const canvasWidth = width * scale;
+    const canvasHeight = generations * scale;
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const cellW = Math.floor(canvas.width / width);
-    const cellH = Math.floor(canvas.height / generations);
+
+    // Color interpolation helpers
+    function hexToRgb(hex) {
+      hex = hex.replace('#', '');
+      return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+    }
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+    function lerpColor(rgbA, rgbB, t) {
+      return [
+        Math.round(lerp(rgbA[0], rgbB[0], t)),
+        Math.round(lerp(rgbA[1], rgbB[1], t)),
+        Math.round(lerp(rgbA[2], rgbB[2], t)),
+      ];
+    }
+    const bgA = hexToRgb(bg_from);
+    const bgB = hexToRgb(bg_to);
+    const fgA = hexToRgb(fg_from);
+    const fgB = hexToRgb(fg_to);
+
     for (let g = 0; g < generations; g++) {
+      const bgColor = lerpColor(bgA, bgB, generations > 1 ? g / (generations - 1) : 0);
+      const fgColor = lerpColor(fgA, fgB, generations > 1 ? g / (generations - 1) : 0);
       for (let x = 0; x < width; x++) {
         const idx = g * width + x;
         if (result[idx] === 1) {
-          ctx.fillStyle = '#ff66cc';
-          ctx.fillRect(x * cellW, g * cellH, cellW, cellH);
+          ctx.fillStyle = `rgb(${fgColor[0]},${fgColor[1]},${fgColor[2]})`;
+        } else {
+          ctx.fillStyle = `rgb(${bgColor[0]},${bgColor[1]},${bgColor[2]})`;
+        }
+        if (circles) {
+          ctx.beginPath();
+          ctx.arc(x * scale + scale / 2, g * scale + scale / 2, scale / 2, 0, 2 * Math.PI);
+          ctx.fill();
+        } else {
+          ctx.fillRect(x * scale, g * scale, scale, scale);
         }
       }
     }
@@ -35,3 +76,5 @@ async function main() {
 }
 
 main();
+
+
