@@ -5,10 +5,11 @@
  * @param {number | null | undefined} random_distribution
  * @param {number} width
  * @param {number} generations
+ * @param {bigint | null} [seed]
  * @returns {Uint8Array}
  */
-export function run_automaton(rule, random_distribution, width, generations) {
-    const ret = wasm.run_automaton(rule, !isLikeNone(random_distribution), isLikeNone(random_distribution) ? 0 : random_distribution, width, generations);
+export function run_automaton(rule, random_distribution, width, generations, seed) {
+    const ret = wasm.run_automaton(rule, !isLikeNone(random_distribution), isLikeNone(random_distribution) ? 0 : random_distribution, width, generations, !isLikeNone(seed), isLikeNone(seed) ? BigInt(0) : seed);
     var v1 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
     wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
     return v1;

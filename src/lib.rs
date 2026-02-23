@@ -9,8 +9,9 @@ pub fn run_automaton(
     random_distribution: Option<f64>,
     width: usize,
     generations: usize,
+    seed: Option<u64>,
 ) -> Vec<u8> {
-    let mut rng = seeded_small_rng();
+    let mut rng = seeded_small_rng(seed);
 
     let mut current = vec![0u8; width];
     if let Some(p) = random_distribution {

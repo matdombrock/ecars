@@ -1,13 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export function run_automaton(rule: number, random_distribution: number | null | undefined, width: number, generations: number): Uint8Array;
+export function run_automaton(rule: number, random_distribution: number | null | undefined, width: number, generations: number, seed?: bigint | null): Uint8Array;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
     readonly memory: WebAssembly.Memory;
-    readonly run_automaton: (a: number, b: number, c: number, d: number, e: number) => [number, number];
+    readonly run_automaton: (a: number, b: number, c: number, d: number, e: number, f: number, g: bigint) => [number, number];
     readonly __wbindgen_exn_store: (a: number) => void;
     readonly __externref_table_alloc: () => number;
     readonly __wbindgen_externrefs: WebAssembly.Table;

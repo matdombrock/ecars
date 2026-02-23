@@ -22,9 +22,20 @@ async function main() {
     const bg_to = document.getElementById('bg_to').value;
     const fg_from = document.getElementById('fg_from').value;
     const fg_to = document.getElementById('fg_to').value;
+    const seedStr = document.getElementById('seed').value;
+    let seed = undefined;
+    if (seedStr !== '') {
+      try {
+        seed = BigInt(seedStr);
+      } catch {
+        seed = undefined;
+      }
+    }
 
     // Call wasm
-    const result = run_automaton(rule, random_distribution, width, generations);
+    const result = run_automaton(rule, random_distribution, width, generations, seed);
+
+
 
     // Always resize canvas to fit the full automaton
     const canvasWidth = width * scale;
@@ -36,7 +47,7 @@ async function main() {
     // Color interpolation helpers
     function hexToRgb(hex) {
       hex = hex.replace('#', '');
-      return [parseInt(hex.slice(0,2),16), parseInt(hex.slice(2,4),16), parseInt(hex.slice(4,6),16)];
+      return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)];
     }
     function lerp(a, b, t) {
       return a + (b - a) * t;

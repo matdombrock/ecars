@@ -11,7 +11,7 @@ body {
   margin: 32px auto;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   padding: 32px 24px 24px 24px;
 }
 
@@ -19,6 +19,12 @@ h1 {
   text-align: center;
   margin-bottom: 24px;
   font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 24px;
   letter-spacing: 1px;
 }
 
@@ -36,7 +42,7 @@ form#params {
   background: #f8f8fc;
   border-radius: 8px;
   padding: 18px 18px 12px 18px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
   margin-bottom: 0;
 }
 
@@ -45,6 +51,7 @@ form#params {
     flex-direction: column;
     gap: 18px;
   }
+
   .form-section {
     margin-bottom: 0;
     min-width: 0;
@@ -99,9 +106,10 @@ button[type="submit"] {
   font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
   transition: background 0.2s;
 }
+
 button[type="submit"]:hover {
   background: linear-gradient(90deg, #ff66cc 20%, #ffaaff 100%);
 }
@@ -113,14 +121,14 @@ button[type="submit"]:hover {
   background: #f3f3f8;
   border-radius: 8px;
   padding: 18px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 canvas#output {
   background: #fff;
   border: 1px solid #eee;
   border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
   max-width: 100%;
   height: auto;
   display: block;

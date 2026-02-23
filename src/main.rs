@@ -11,6 +11,10 @@ struct Args {
     /// Rule number (0-255)
     rule: u8,
 
+    /// Random seed (u64, optional)
+    #[arg(long)]
+    seed: Option<u64>,
+
     /// Probability for random initial state (0.0-1.0), or 'none' for single center cell
     #[arg(long, short = 'd', default_value = "none")]
     random_distribution: String,
@@ -75,7 +79,14 @@ fn main() {
         "none" => None,
         s => Some(s.parse().expect("Invalid random_distribution")),
     };
-    let flat_vec = run_automaton(args.rule, random_distribution, args.width, args.generations);
+    let seed = args.seed;
+    let flat_vec = run_automaton(
+        args.rule,
+        random_distribution,
+        args.width,
+        args.generations,
+        seed,
+    );
     let generations_vec: Vec<Vec<u8>> = flat_vec
         .chunks(args.width)
         .map(|chunk| chunk.to_vec())

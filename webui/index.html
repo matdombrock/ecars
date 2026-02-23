@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cellular Automaton Web UI</title>
+  <title>ECARS Web UI</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="container">
-    <h1>Cellular Automaton (WASM)</h1>
+    <h1>ECARS</h1>
+    <h2>Elementary Cellular Automata - Rust WASM</h2>
     <form id="params">
       <div class="form-section">
         <h2>Automaton Parameters</h2>
@@ -17,8 +20,12 @@
           <input type="number" id="rule" min="0" max="255" value="110">
         </div>
         <div class="form-row">
-          <label for="random_distribution">Random Distribution</label>
+          <label for="random_distribution">Distribution</label>
           <input type="number" step="0.01" id="random_distribution" placeholder="0.0-1.0 or blank for center">
+        </div>
+        <div class="form-row">
+          <label for="seed">Seed</label>
+          <input type="text" id="seed" placeholder="blank for random">
         </div>
         <div class="form-row">
           <label for="width">Width</label>
@@ -40,19 +47,19 @@
       <div class="form-section">
         <h2>Colors</h2>
         <div class="form-row">
-          <label for="bg_from">Background From</label>
+          <label for="bg_from">BG From</label>
           <input type="color" id="bg_from" value="#ffaaff">
         </div>
         <div class="form-row">
-          <label for="bg_to">Background To</label>
+          <label for="bg_to">BG To</label>
           <input type="color" id="bg_to" value="#000000">
         </div>
         <div class="form-row">
-          <label for="fg_from">Foreground From</label>
+          <label for="fg_from">FG From</label>
           <input type="color" id="fg_from" value="#000000">
         </div>
         <div class="form-row">
-          <label for="fg_to">Foreground To</label>
+          <label for="fg_to">FG To</label>
           <input type="color" id="fg_to" value="#aaffff">
         </div>
       </div>
@@ -66,4 +73,5 @@
   </div>
   <script type="module" src="main.js"></script>
 </body>
+
 </html>
