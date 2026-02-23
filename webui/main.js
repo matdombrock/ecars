@@ -6,6 +6,22 @@ async function main() {
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
 
+  // Randomize button logic
+  document.getElementById('randomize').onclick = () => {
+    // Randomize rule
+    document.getElementById('rule').value = Math.floor(Math.random() * 256);
+    // Randomize random distribution
+    document.getElementById('random_distribution').value = (Math.random()).toFixed(2);
+    // Randomize colors
+    function randomHexColor() {
+      return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
+    }
+    document.getElementById('bg_from').value = randomHexColor();
+    document.getElementById('bg_to').value = randomHexColor();
+    document.getElementById('fg_from').value = randomHexColor();
+    document.getElementById('fg_to').value = randomHexColor();
+  };
+
   form.onsubmit = async (e) => {
     e.preventDefault();
     const rule = parseInt(document.getElementById('rule').value, 10);
