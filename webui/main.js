@@ -20,9 +20,13 @@ async function main() {
     document.getElementById('bg_to').value = randomHexColor();
     document.getElementById('fg_from').value = randomHexColor();
     document.getElementById('fg_to').value = randomHexColor();
+    // Randomize seed (64-bit unsigned integer)
+    const randSeed = BigInt(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString();
+    document.getElementById('seed').value = randSeed;
     // Trigger generation
     form.requestSubmit();
   };
+
 
   form.onsubmit = async (e) => {
     e.preventDefault();
