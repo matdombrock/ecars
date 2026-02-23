@@ -20,6 +20,8 @@ async function main() {
     document.getElementById('bg_to').value = randomHexColor();
     document.getElementById('fg_from').value = randomHexColor();
     document.getElementById('fg_to').value = randomHexColor();
+    // Trigger generation
+    form.requestSubmit();
   };
 
   form.onsubmit = async (e) => {
