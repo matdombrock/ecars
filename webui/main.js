@@ -27,7 +27,6 @@ async function main() {
     form.requestSubmit();
   };
 
-
   form.onsubmit = async (e) => {
     e.preventDefault();
     const rule = parseInt(document.getElementById('rule').value, 10);
@@ -56,8 +55,6 @@ async function main() {
 
     // Call wasm
     const result = run_automaton(rule, random_distribution, width, generations, seed);
-
-
 
     // Always resize canvas to fit the full automaton
     const canvasWidth = width * scale;
@@ -108,6 +105,18 @@ async function main() {
   };
 }
 
+// Ensure the DOM fully loads and attach event to the download button
+window.addEventListener('DOMContentLoaded', () => {
+  const downloadBtn = document.getElementById('download-image');
+  const canvas = document.getElementById('output');
+  if (downloadBtn && canvas) {
+    downloadBtn.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'automaton.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  }
+});
+
 main();
-
-

@@ -33,19 +33,19 @@
         </div>
         <div class="form-row">
           <label for="generations">Generations</label>
-          <input type="number" id="generations" min="1" max="256" value="32">
+          <input type="number" id="generations" min="1" max="256" value="64">
         </div>
+      </div>
+      <div class="form-section">
+        <h2>Visual</h2>
         <div class="form-row">
           <label for="scale">Scale</label>
-          <input type="number" id="scale" min="1" max="20" value="1">
+          <input type="number" id="scale" min="1" max="20" value="16">
         </div>
         <div class="form-row">
           <label for="circles">Circle Mode</label>
           <input type="checkbox" id="circles">
         </div>
-      </div>
-      <div class="form-section">
-        <h2>Colors</h2>
         <div class="form-row">
           <label for="bg_from">BG From</label>
           <input type="color" id="bg_from" value="#ffaaff">
@@ -72,6 +72,7 @@
       <canvas id="output" width="512" height="256"></canvas>
     </div>
   </div>
+  <button id="download-image">Download Image</button>
   <script type="module" src="main.js"></script>
 </body>
 
