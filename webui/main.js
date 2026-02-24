@@ -33,7 +33,7 @@ async function main() {
     const generatingEl = document.getElementById('generating');
     generatingEl.style.display = 'block';
     await new Promise(requestAnimationFrame); // Force browser repaint
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Temporary 1s pause for testing
+    await new Promise(resolve => setTimeout(resolve, 1)); // Ensure "Generating..." is visible before heavy computation
     const rule = parseInt(document.getElementById('rule').value, 10);
     const width = parseInt(document.getElementById('width').value, 10);
     const generations = parseInt(document.getElementById('generations').value, 10);

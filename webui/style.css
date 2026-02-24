@@ -145,14 +145,22 @@ button[type="submit"]:hover {
 
 
 #generating {
-  display: none;
+  /* display: none; */
   text-align: center;
   font-size: 1.2rem;
   color: #555;
-  margin-top: 16px;
-  /* position: relative; */
-  /* top: 2rem; */
-  z-index: 1000;
+  position: fixed;
+  /* top: 50%; */
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  background: rgba(255, 255, 255, 0.9);
+  width: 100%;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 
