@@ -53,10 +53,10 @@ pub fn generations_to_rgba_buffer(
     alive_shape: &str,
     dead_shape: &str,
     use_links: bool,
-    bg_from: Rgb<u8>,
-    bg_to: Rgb<u8>,
-    fg_from: Rgb<u8>,
-    fg_to: Rgb<u8>,
+    dead_from: Rgb<u8>,
+    dead_to: Rgb<u8>,
+    alive_from: Rgb<u8>,
+    alive_to: Rgb<u8>,
 ) -> Vec<u8> {
     let img_width = (width * scale) as u32;
     let img_height = (height * scale) as u32;
@@ -76,9 +76,9 @@ pub fn generations_to_rgba_buffer(
             };
             let t = (fx + fy) / 2.0;
             let (color, shape) = if cell == 1 {
-                (lerp_color(&fg_from, &fg_to, t), alive_shape)
+                (lerp_color(&alive_from, &alive_to, t), alive_shape)
             } else {
-                (lerp_color(&bg_from, &bg_to, t), dead_shape)
+                (lerp_color(&dead_from, &dead_to, t), dead_shape)
             };
 
             match shape {
@@ -243,10 +243,10 @@ pub fn generations_to_rgba_buffer(
             width,
             height,
             scale,
-            fg_from,
-            fg_to,
-            bg_from,
-            bg_to,
+            alive_from,
+            alive_to,
+            dead_from,
+            dead_to,
         );
     }
     buffer

@@ -101,10 +101,10 @@ pub fn generate_automaton_image(
         generations_vec.push(next.clone());
         current = next;
     }
-    let bg_from = parse_hex_color(bg_from);
-    let bg_to = parse_hex_color(bg_to);
-    let fg_from = parse_hex_color(fg_from);
-    let fg_to = parse_hex_color(fg_to);
+    let dead_from = parse_hex_color(bg_from);
+    let dead_to = parse_hex_color(bg_to);
+    let alive_from = parse_hex_color(fg_from);
+    let alive_to = parse_hex_color(fg_to);
     image_output::generations_to_rgba_buffer(
         &generations_vec,
         width,
@@ -113,9 +113,9 @@ pub fn generate_automaton_image(
         alive_shape,
         dead_shape,
         use_links,
-        bg_from,
-        bg_to,
-        fg_from,
-        fg_to,
+        dead_from,
+        dead_to,
+        alive_from,
+        alive_to,
     )
 }

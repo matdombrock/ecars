@@ -17,15 +17,29 @@ async function main() {
     function randomHexColor() {
       return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padStart(6, '0');
     }
-    document.getElementById('bg_from').value = randomHexColor();
-    document.getElementById('bg_to').value = randomHexColor();
-    document.getElementById('fg_from').value = randomHexColor();
-    document.getElementById('fg_to').value = randomHexColor();
+    const colorIds = [
+      'dead_color_from', 'dead_color_to', 'alive_color_from', 'alive_color_to'
+    ];
+    colorIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = randomHexColor();
+    });
+    // Randomize shapes
+    const shapeIds = ['alive-shape', 'dead-shape'];
+    shapeIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        const options = el.options;
+        el.selectedIndex = Math.floor(Math.random() * options.length);
+      }
+    });
     // Randomize seed (64-bit unsigned integer)
     const randSeed = BigInt(Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)).toString();
-    document.getElementById('seed').value = randSeed;
+    const seedEl = document.getElementById('seed');
+    if (seedEl) seedEl.value = randSeed;
     // Trigger generation
     form.requestSubmit();
+    form.dispatchEvent(new Event('submit', { cancelable: true }));
   };
 
   form.onsubmit = async (e) => {
@@ -47,10 +61,10 @@ async function main() {
     const alive_shape = document.getElementById('alive-shape').value;
     const dead_shape = document.getElementById('dead-shape').value;
     const links = document.getElementById('links').checked;
-    const bg_from = document.getElementById('bg_from').value;
-    const bg_to = document.getElementById('bg_to').value;
-    const fg_from = document.getElementById('fg_from').value;
-    const fg_to = document.getElementById('fg_to').value;
+    const dead_color_from = document.getElementById('dead_color_from').value;
+    const dead_color_to = document.getElementById('dead_color_to').value;
+    const alive_color_from = document.getElementById('alive_color_from').value;
+    const alive_color_to = document.getElementById('alive_color_to').value;
     const seedStr = document.getElementById('seed').value;
     let seed = undefined;
     if (seedStr !== '') {
@@ -72,10 +86,10 @@ async function main() {
       alive_shape,
       dead_shape,
       links,
-      bg_from,
-      bg_to,
-      fg_from,
-      fg_to
+      dead_color_from,
+      dead_color_to,
+      alive_color_from,
+      alive_color_to
     );
 
     // Always resize canvas to fit the full automaton

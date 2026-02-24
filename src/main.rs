@@ -51,25 +51,21 @@ struct Args {
     #[arg(long, short = 'o')]
     output: Option<String>,
 
-    /// Background color start
-    /// (Image only)
+    /// Start color for dead cells
     #[arg(long, default_value = "#ffaaff")]
-    bg_from: String,
+    dead_color_from: String,
 
-    /// Background color end
-    /// (Image only)
+    /// End color for dead cells
     #[arg(long, default_value = "#000000")]
-    bg_to: String,
+    dead_color_to: String,
 
-    /// Foreground color start
-    /// (Image only)
+    /// Start color for alive cells
     #[arg(long, default_value = "#000000")]
-    fg_from: String,
+    alive_color_from: String,
 
-    /// Foreground color end
-    /// (Image only)
+    /// End color for alive cells
     #[arg(long, default_value = "#aaffff")]
-    fg_to: String,
+    alive_color_to: String,
 }
 
 fn parse_hex_color(s: &str) -> Rgb<u8> {
@@ -101,10 +97,10 @@ fn main() {
         .collect();
 
     if let Some(output_path) = args.output {
-        let bg_from = parse_hex_color(&args.bg_from);
-        let bg_to = parse_hex_color(&args.bg_to);
-        let fg_from = parse_hex_color(&args.fg_from);
-        let fg_to = parse_hex_color(&args.fg_to);
+        let dead_from = parse_hex_color(&args.dead_color_from);
+        let dead_to = parse_hex_color(&args.dead_color_to);
+        let alive_from = parse_hex_color(&args.alive_color_from);
+        let alive_to = parse_hex_color(&args.alive_color_to);
         image_output::save_generations_as_png(
             &generations_vec,
             args.width,
@@ -113,11 +109,11 @@ fn main() {
             &args.alive_shape,
             &args.dead_shape,
             args.links,
-            &output_path,
-            bg_from,
-            bg_to,
-            fg_from,
-            fg_to,
+            output_path,
+            dead_from,
+            dead_to,
+            alive_from,
+            alive_to,
         );
     } else if args.pretty_print {
         for gen in generations_vec {

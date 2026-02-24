@@ -34,6 +34,10 @@ Run the CLI:
 - `--pretty_print`: Pretty print generations (default: true)
 - `--alive-shape <shape>`: Shape to use for alive cells in PNG output (`square`, `circle`, `triangle-up`, `triangle-down`, `triangle-left`, `triangle-right`, `triangle-r-a`, `triangle-r-b`, `triangle-r-c`, `triangle-r-d`). Default: `square`
 - `--dead-shape <shape>`: Shape to use for dead cells in PNG output (same options as above). Default: `square`
+- `--alive-color-from <hex>`: Start color for alive cells (default: #000000)
+- `--alive-color-to <hex>`: End color for alive cells (default: #aaffff)
+- `--dead-color-from <hex>`: Start color for dead cells (default: #ffaaff)
+- `--dead-color-to <hex>`: End color for dead cells (default: #000000)
 - `--links`: Draw links between cells
 - `--scale <usize>`: Scale factor for PNG output (default: 1)
 - `--output <file>`: Output PNG file (optional)
