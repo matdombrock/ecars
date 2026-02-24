@@ -31,7 +31,7 @@ struct Args {
     #[arg(long, short = 'p', default_value_t = true)]
     pretty_print: bool,
 
-    /// Shape to use for cells in PNG output (square, circle, triangle-up, triangle-down)
+    /// Shape to use for cells in PNG output (square, circle, triangle-up, triangle-down, triangle-left, triangle-right, triangle-r-a, triangle-r-b, triangle-r-c, triangle-r-d)
     #[arg(long, default_value = "square")]
     shape: String,
 
