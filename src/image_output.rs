@@ -99,7 +99,7 @@ pub fn generations_to_rgba_buffer(
                         }
                     }
                 }
-                "triangle-up" => {
+                "triangle-up" | "triangle-r-up" => {
                     for dy in 0..scale {
                         let row_width = ((dy as f32 / scale as f32) * scale as f32).ceil() as usize;
                         let x_start = x * scale + (scale - row_width) / 2;
@@ -113,7 +113,7 @@ pub fn generations_to_rgba_buffer(
                         }
                     }
                 }
-                "triangle-down" => {
+                "triangle-down" | "triangle-r-down" => {
                     for dy in 0..scale {
                         let row_width = (((scale - dy - 1) as f32 / scale as f32) * scale as f32)
                             .ceil() as usize;
@@ -125,6 +125,94 @@ pub fn generations_to_rgba_buffer(
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
                             buffer[idx + 3] = 255;
+                        }
+                    }
+                }
+                "triangle-left" => {
+                    for dx in 0..scale {
+                        let col_height =
+                            ((dx as f32 / scale as f32) * scale as f32).ceil() as usize;
+                        let y_start = y * scale + (scale - col_height) / 2;
+                        for dy in y_start..(y_start + col_height) {
+                            let idx = (((dy) * (width * scale) + (x * scale + dx)) * 4) as usize;
+                            buffer[idx] = color[0];
+                            buffer[idx + 1] = color[1];
+                            buffer[idx + 2] = color[2];
+                            buffer[idx + 3] = 255;
+                        }
+                    }
+                }
+                "triangle-right" => {
+                    for dx in 0..scale {
+                        let col_height = (((scale - dx - 1) as f32 / scale as f32) * scale as f32)
+                            .ceil() as usize;
+                        let y_start = y * scale + (scale - col_height) / 2;
+                        for dy in y_start..(y_start + col_height) {
+                            let idx = (((dy) * (width * scale) + (x * scale + dx)) * 4) as usize;
+                            buffer[idx] = color[0];
+                            buffer[idx + 1] = color[1];
+                            buffer[idx + 2] = color[2];
+                            buffer[idx + 3] = 255;
+                        }
+                    }
+                }
+                "triangle-r-a" => {
+                    // Right angle at bottom-left (0, scale-1)
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            if dx <= dy {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
+                        }
+                    }
+                }
+                "triangle-r-b" => {
+                    // Right angle at bottom-right (scale-1, scale-1)
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            if dx >= scale - dy - 1 {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
+                        }
+                    }
+                }
+                "triangle-r-c" => {
+                    // Right angle at top-left (0, 0)
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            if dx >= dy {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
+                        }
+                    }
+                }
+                "triangle-r-d" => {
+                    // Right angle at top-right (scale-1, 0)
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            if dx <= scale - dy - 1 {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
                         }
                     }
                 }
