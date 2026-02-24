@@ -1,4 +1,5 @@
 use image::Rgb;
+use image::{ImageBuffer, Rgba};
 
 /// Linearly interpolate between two colors.
 fn lerp_color(from: &Rgb<u8>, to: &Rgb<u8>, t: f32) -> Rgb<u8> {
@@ -6,6 +7,39 @@ fn lerp_color(from: &Rgb<u8>, to: &Rgb<u8>, t: f32) -> Rgb<u8> {
     let g = from[1] as f32 + (to[1] as f32 - from[1] as f32) * t;
     let b = from[2] as f32 + (to[2] as f32 - from[2] as f32) * t;
     Rgb([r.round() as u8, g.round() as u8, b.round() as u8])
+}
+
+#[allow(dead_code)] // NOTE: This is not dead, compiler issue
+pub fn save_generations_as_png(
+    generations: &[Vec<u8>],
+    width: usize,
+    height: usize,
+    scale: usize,
+    use_circles: bool,
+    use_links: bool,
+    output_path: &str,
+    bg_from: Rgb<u8>,
+    bg_to: Rgb<u8>,
+    fg_from: Rgb<u8>,
+    fg_to: Rgb<u8>,
+) {
+    let buffer = generations_to_rgba_buffer(
+        generations,
+        width,
+        height,
+        scale,
+        use_circles,
+        use_links,
+        bg_from,
+        bg_to,
+        fg_from,
+        fg_to,
+    );
+    let img_width = (width * scale) as u32;
+    let img_height = (height * scale) as u32;
+    let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(img_width, img_height, buffer)
+        .expect("Failed to create image buffer");
+    img.save(output_path).expect("Failed to save PNG");
 }
 
 /// Generate an RGBA buffer for the automaton generations (for WASM canvas rendering).
