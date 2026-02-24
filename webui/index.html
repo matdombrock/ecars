@@ -44,8 +44,23 @@
           <input type="number" id="scale" min="1" max="64" value="16">
         </div>
         <div class="form-row">
-          <label for="shape">Shape</label>
-          <select id="shape">
+          <label for="alive-shape">Alive Shape</label>
+          <select id="alive-shape">
+            <option value="square" selected>Square</option>
+            <option value="circle">Circle</option>
+            <option value="triangle-up">Triangle Up (isosceles)</option>
+            <option value="triangle-down">Triangle Down (isosceles)</option>
+            <option value="triangle-left">Triangle Left (isosceles)</option>
+            <option value="triangle-right">Triangle Right (isosceles)</option>
+            <option value="triangle-r-a">Triangle R-A (right angle bottom-left)</option>
+            <option value="triangle-r-b">Triangle R-B (right angle bottom-right)</option>
+            <option value="triangle-r-c">Triangle R-C (right angle top-left)</option>
+            <option value="triangle-r-d">Triangle R-D (right angle top-right)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="dead-shape">Dead Shape</label>
+          <select id="dead-shape">
             <option value="square" selected>Square</option>
             <option value="circle">Circle</option>
             <option value="triangle-up">Triangle Up (isosceles)</option>

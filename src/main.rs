@@ -31,9 +31,13 @@ struct Args {
     #[arg(long, short = 'p', default_value_t = true)]
     pretty_print: bool,
 
-    /// Shape to use for cells in PNG output (square, circle, triangle-up, triangle-down, triangle-left, triangle-right, triangle-r-a, triangle-r-b, triangle-r-c, triangle-r-d)
+    /// Shape to use for alive cells in PNG output
     #[arg(long, default_value = "square")]
-    shape: String,
+    alive_shape: String,
+
+    /// Shape to use for dead cells in PNG output
+    #[arg(long, default_value = "square")]
+    dead_shape: String,
 
     /// Draw links between neighboring cells (post-processing)
     #[arg(long, default_value_t = false)]
@@ -106,7 +110,8 @@ fn main() {
             args.width,
             args.generations,
             args.scale,
-            &args.shape,
+            &args.alive_shape,
+            &args.dead_shape,
             args.links,
             &output_path,
             bg_from,

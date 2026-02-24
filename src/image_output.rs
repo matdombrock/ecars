@@ -15,7 +15,8 @@ pub fn save_generations_as_png(
     width: usize,
     height: usize,
     scale: usize,
-    shape: &str,
+    alive_shape: &str,
+    dead_shape: &str,
     use_links: bool,
     output_path: &str,
     bg_from: Rgb<u8>,
@@ -28,7 +29,8 @@ pub fn save_generations_as_png(
         width,
         height,
         scale,
-        shape,
+        alive_shape,
+        dead_shape,
         use_links,
         bg_from,
         bg_to,
@@ -48,7 +50,8 @@ pub fn generations_to_rgba_buffer(
     width: usize,
     height: usize,
     scale: usize,
-    shape: &str,
+    alive_shape: &str,
+    dead_shape: &str,
     use_links: bool,
     bg_from: Rgb<u8>,
     bg_to: Rgb<u8>,
@@ -72,10 +75,10 @@ pub fn generations_to_rgba_buffer(
                 0.0
             };
             let t = (fx + fy) / 2.0;
-            let color = if cell == 1 {
-                lerp_color(&fg_from, &fg_to, t)
+            let (color, shape) = if cell == 1 {
+                (lerp_color(&fg_from, &fg_to, t), alive_shape)
             } else {
-                lerp_color(&bg_from, &bg_to, t)
+                (lerp_color(&bg_from, &bg_to, t), dead_shape)
             };
 
             match shape {

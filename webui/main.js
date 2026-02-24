@@ -44,7 +44,8 @@ async function main() {
       random_distribution = parseFloat(randomDistStr);
     }
     const scale = parseInt(document.getElementById('scale').value, 10);
-    const shape = document.getElementById('shape').value;
+    const alive_shape = document.getElementById('alive-shape').value;
+    const dead_shape = document.getElementById('dead-shape').value;
     const links = document.getElementById('links').checked;
     const bg_from = document.getElementById('bg_from').value;
     const bg_to = document.getElementById('bg_to').value;
@@ -68,7 +69,8 @@ async function main() {
       generations,
       seed,
       scale,
-      shape,
+      alive_shape,
+      dead_shape,
       links,
       bg_from,
       bg_to,
