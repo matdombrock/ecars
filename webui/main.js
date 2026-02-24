@@ -1,4 +1,5 @@
-import init, { run_automaton } from '../pkg/ca.js';
+import init, { run_automaton, generate_automaton_image } from '../pkg/ca.js';
+
 
 async function main() {
   await init();
@@ -58,8 +59,20 @@ async function main() {
       }
     }
 
-    // Call wasm
-    const result = run_automaton(rule, random_distribution, width, generations, seed);
+    // Call new WASM function to generate RGBA buffer
+    const buffer = generate_automaton_image(
+      rule,
+      random_distribution,
+      width,
+      generations,
+      seed,
+      scale,
+      circles,
+      bg_from,
+      bg_to,
+      fg_from,
+      fg_to
+    );
 
     // Always resize canvas to fit the full automaton
     const canvasWidth = width * scale;
@@ -68,48 +81,14 @@ async function main() {
     canvas.height = canvasHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Color interpolation helpers
-    function hexToRgb(hex) {
-      hex = hex.replace('#', '');
-      return [parseInt(hex.slice(0, 2), 16), parseInt(hex.slice(2, 4), 16), parseInt(hex.slice(4, 6), 16)];
-    }
-    function lerp(a, b, t) {
-      return a + (b - a) * t;
-    }
-    function lerpColor(rgbA, rgbB, t) {
-      return [
-        Math.round(lerp(rgbA[0], rgbB[0], t)),
-        Math.round(lerp(rgbA[1], rgbB[1], t)),
-        Math.round(lerp(rgbA[2], rgbB[2], t)),
-      ];
-    }
-    const bgA = hexToRgb(bg_from);
-    const bgB = hexToRgb(bg_to);
-    const fgA = hexToRgb(fg_from);
-    const fgB = hexToRgb(fg_to);
+    // Render RGBA buffer to canvas
+    const imageData = new ImageData(new Uint8ClampedArray(buffer), canvasWidth, canvasHeight);
+    ctx.putImageData(imageData, 0, 0);
 
-    for (let g = 0; g < generations; g++) {
-      const bgColor = lerpColor(bgA, bgB, generations > 1 ? g / (generations - 1) : 0);
-      const fgColor = lerpColor(fgA, fgB, generations > 1 ? g / (generations - 1) : 0);
-      for (let x = 0; x < width; x++) {
-        const idx = g * width + x;
-        if (result[idx] === 1) {
-          ctx.fillStyle = `rgb(${fgColor[0]},${fgColor[1]},${fgColor[2]})`;
-        } else {
-          ctx.fillStyle = `rgb(${bgColor[0]},${bgColor[1]},${bgColor[2]})`;
-        }
-        if (circles) {
-          ctx.beginPath();
-          ctx.arc(x * scale + scale / 2, g * scale + scale / 2, scale / 2, 0, 2 * Math.PI);
-          ctx.fill();
-        } else {
-          ctx.fillRect(x * scale, g * scale, scale, scale);
-        }
-      }
-    }
     console.log('Generation over');
     generatingEl.style.display = 'none';
   };
+
 }
 
 // Ensure the DOM fully loads and attach event to the download button
