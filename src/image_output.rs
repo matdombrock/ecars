@@ -87,6 +87,8 @@ pub fn generations_to_rgba_buffer(
             scale,
             fg_from,
             fg_to,
+            bg_from,
+            bg_to,
         );
     }
     buffer
@@ -101,8 +103,10 @@ fn draw_links_bresenham_rgba(
     scale: usize,
     fg_from: Rgb<u8>,
     fg_to: Rgb<u8>,
+    bg_from: Rgb<u8>,
+    bg_to: Rgb<u8>,
 ) {
-    let thickness = ((scale as i32) / 4).max(1);
+    let thickness = ((scale as i32) / 8).max(1);
     let img_width = (width * scale) as i32;
     let img_height = (height * scale) as i32;
     let neighbor_offsets = [
@@ -149,9 +153,11 @@ fn draw_links_bresenham_rgba(
                             (ny as i32 * scale as i32 + scale as i32 / 2),
                         );
                         let debug_color = if cell_val == 1 {
-                            Rgb([255, 255, 255])
+                            // Invert FG gradient for alive links
+                            lerp_color(&fg_to, &fg_from, t)
                         } else {
-                            Rgb([255, 255, 255])
+                            // Invert BG gradient for dead links
+                            lerp_color(&bg_to, &bg_from, t)
                         };
                         draw_line_bresenham_rgba(
                             buffer,
