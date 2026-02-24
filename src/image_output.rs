@@ -102,6 +102,7 @@ fn draw_links_bresenham_rgba(
     fg_from: Rgb<u8>,
     fg_to: Rgb<u8>,
 ) {
+    let thickness = ((scale as i32) / 4).max(1);
     let img_width = (width * scale) as i32;
     let img_height = (height * scale) as i32;
     let neighbor_offsets = [
@@ -147,11 +148,10 @@ fn draw_links_bresenham_rgba(
                             (nx as i32 * scale as i32 + scale as i32 / 2),
                             (ny as i32 * scale as i32 + scale as i32 / 2),
                         );
-                        // DEBUG: Use magenta for alive links, cyan for dead links
                         let debug_color = if cell_val == 1 {
-                            Rgb([255, 0, 255])
+                            Rgb([255, 255, 255])
                         } else {
-                            Rgb([0, 255, 255])
+                            Rgb([255, 255, 255])
                         };
                         draw_line_bresenham_rgba(
                             buffer,
@@ -162,6 +162,7 @@ fn draw_links_bresenham_rgba(
                             ncx,
                             ncy,
                             debug_color,
+                            thickness,
                         );
                     }
                 }
@@ -179,6 +180,7 @@ fn draw_line_bresenham_rgba(
     x1: i32,
     y1: i32,
     color: Rgb<u8>,
+    thickness: i32,
 ) {
     let mut x0 = x0;
     let mut y0 = y0;
@@ -188,12 +190,20 @@ fn draw_line_bresenham_rgba(
     let sy = if y0 < y1 { 1 } else { -1 };
     let mut err = dx + dy;
     loop {
-        if x0 >= 0 && y0 >= 0 && x0 < img_width && y0 < img_height {
-            let idx = ((y0 * img_width + x0) * 4) as usize;
-            buffer[idx] = color[0];
-            buffer[idx + 1] = color[1];
-            buffer[idx + 2] = color[2];
-            buffer[idx + 3] = 255;
+        // Draw a filled square of size thickness centered at (x0, y0)
+        let half = thickness / 2;
+        for dy in -half..=half {
+            for dx in -half..=half {
+                let px = x0 + dx;
+                let py = y0 + dy;
+                if px >= 0 && py >= 0 && px < img_width && py < img_height {
+                    let idx = ((py * img_width + px) * 4) as usize;
+                    buffer[idx] = color[0];
+                    buffer[idx + 1] = color[1];
+                    buffer[idx + 2] = color[2];
+                    buffer[idx + 3] = 255;
+                }
+            }
         }
         if x0 == x1 && y0 == y1 {
             break;
