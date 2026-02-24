@@ -45,6 +45,7 @@ async function main() {
     }
     const scale = parseInt(document.getElementById('scale').value, 10);
     const circles = document.getElementById('circles').checked;
+    const links = document.getElementById('links').checked;
     const bg_from = document.getElementById('bg_from').value;
     const bg_to = document.getElementById('bg_to').value;
     const fg_from = document.getElementById('fg_from').value;
@@ -68,6 +69,7 @@ async function main() {
       seed,
       scale,
       circles,
+      links,
       bg_from,
       bg_to,
       fg_from,

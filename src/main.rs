@@ -35,6 +35,10 @@ struct Args {
     #[arg(long, default_value_t = false)]
     circles: bool,
 
+    /// Draw links between neighboring cells (post-processing)
+    #[arg(long, default_value_t = false)]
+    links: bool,
+
     /// Scale factor for PNG output (each cell becomes scale x scale pixels)
     #[arg(long, short = 's', default_value_t = 1)]
     scale: usize,
@@ -103,6 +107,7 @@ fn main() {
             args.generations,
             args.scale,
             args.circles,
+            args.links,
             &output_path,
             bg_from,
             bg_to,
