@@ -32,8 +32,8 @@ Run the CLI:
 - `--generations <usize>`: Number of generations (default: 32)
 - `--seed <u64>`: Random seed (optional, for reproducibility)
 - `--pretty_print`: Pretty print generations (default: true)
-- `--alive-shape <shape>`: Shape to use for alive cells in PNG output (`square`, `circle`, `triangle-up`, `triangle-down`, `triangle-left`, `triangle-right`, `triangle-r-a`, `triangle-r-b`, `triangle-r-c`, `triangle-r-d`). Default: `square`
-- `--dead-shape <shape>`: Shape to use for dead cells in PNG output (same options as above). Default: `square`
+- `--alive-shape <shape>`: Shape to use for alive cells in PNG output (`square`, `circle`, `circle-small`, `triangle-up`, `triangle-down`, `triangle-left`, `triangle-right`, `triangle-r-a`, `triangle-r-b`, `triangle-r-c`, `triangle-r-d`). Default: `square`
+- `--dead-shape <shape>`: Shape to use for dead cells in PNG output (same options as above, including `circle-small`). Default: `square`
 - `--alive-color-from <hex>`: Start color for alive cells (default: #000000)
 - `--alive-color-to <hex>`: End color for alive cells (default: #aaffff)
 - `--dead-color-from <hex>`: Start color for dead cells (default: #ffaaff)

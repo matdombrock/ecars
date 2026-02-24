@@ -102,6 +102,26 @@ pub fn generations_to_rgba_buffer(
                         }
                     }
                 }
+                "circle-small" => {
+                    let radius = scale as f32 * 0.25;
+                    let center_x = x as f32 * scale as f32 + scale as f32 * 0.5;
+                    let center_y = y as f32 * scale as f32 + scale as f32 * 0.5;
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let px = x as f32 * scale as f32 + dx as f32 + 0.5;
+                            let py = y as f32 * scale as f32 + dy as f32 + 0.5;
+                            let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
+                            if dist <= radius {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
+                        }
+                    }
+                }
                 "triangle-up" | "triangle-r-up" => {
                     for dy in 0..scale {
                         let row_width = ((dy as f32 / scale as f32) * scale as f32).ceil() as usize;

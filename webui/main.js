@@ -25,12 +25,21 @@ async function main() {
       if (el) el.value = randomHexColor();
     });
     // Randomize shapes
+    const shapeOptions = [
+      'square', 'circle', 'circle-small', 'triangle-up', 'triangle-down',
+      'triangle-left', 'triangle-right', 'triangle-r-a', 'triangle-r-b', 'triangle-r-c', 'triangle-r-d'
+    ];
     const shapeIds = ['alive-shape', 'dead-shape'];
     shapeIds.forEach(id => {
       const el = document.getElementById(id);
       if (el) {
-        const options = el.options;
-        el.selectedIndex = Math.floor(Math.random() * options.length);
+        const randomShape = shapeOptions[Math.floor(Math.random() * shapeOptions.length)];
+        for (let i = 0; i < el.options.length; i++) {
+          if (el.options[i].value === randomShape) {
+            el.selectedIndex = i;
+            break;
+          }
+        }
       }
     });
     // Randomize seed (64-bit unsigned integer)
