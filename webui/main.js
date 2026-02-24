@@ -1,4 +1,4 @@
-import init, { run_automaton, generate_automaton_image } from '../pkg/ca.js';
+import init, { run_automaton, generate_automaton_image } from './pkg/ca.js';
 
 
 async function main() {

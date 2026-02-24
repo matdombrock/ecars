@@ -33,6 +33,7 @@ Run the CLI:
 - `--seed <u64>`: Random seed (optional, for reproducibility)
 - `--pretty_print`: Pretty print generations (default: true)
 - `--circles`: Draw cells as circles in PNG output
+- `--links`: Draw links between cells
 - `--scale <usize>`: Scale factor for PNG output (default: 1)
 - `--output <file>`: Output PNG file (optional)
 - `--bg_from <hex>`: Background color start (default: #ffaaff)
