@@ -116,7 +116,8 @@ window.addEventListener('DOMContentLoaded', () => {
   if (downloadBtn && canvas) {
     downloadBtn.addEventListener('click', () => {
       const link = document.createElement('a');
-      link.download = 'automaton.png';
+      const timestamp = Date.now();
+      link.download = `ecars-${timestamp}.png`;
       link.href = canvas.toDataURL();
       link.click();
     });

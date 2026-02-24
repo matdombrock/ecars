@@ -109,7 +109,7 @@ fn main() {
             &args.alive_shape,
             &args.dead_shape,
             args.links,
-            output_path,
+            &output_path,
             dead_from,
             dead_to,
             alive_from,
