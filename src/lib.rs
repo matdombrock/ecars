@@ -1,9 +1,9 @@
 use rand::Rng;
 use wasm_bindgen::prelude::*;
-mod rng_utils;
 mod image_output;
-use rng_utils::seeded_small_rng;
+mod rng_utils;
 use image::Rgb;
+use rng_utils::seeded_small_rng;
 
 #[wasm_bindgen]
 pub fn run_automaton(
@@ -65,7 +65,7 @@ pub fn generate_automaton_image(
     generations: usize,
     seed: Option<u64>,
     scale: usize,
-    use_circles: bool,
+    shape: &str,
     use_links: bool,
     bg_from: &str,
     bg_to: &str,
@@ -109,7 +109,7 @@ pub fn generate_automaton_image(
         width,
         generations,
         scale,
-        use_circles,
+        shape,
         use_links,
         bg_from,
         bg_to,
@@ -117,5 +117,3 @@ pub fn generate_automaton_image(
         fg_to,
     )
 }
-
-

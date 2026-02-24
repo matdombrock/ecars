@@ -27,7 +27,7 @@ for i in $(seq 1 "$1"); do
 
     # Run the generation command (update the actual Rust binary path if needed)
     cargo run --manifest-path ~/Lab/ecars/Cargo.toml -- \
-        "$RULE" -w "$WIDTH" -g "$GENERATIONS" --circles -s "$SCALE" -d "$DISTRIBUTION" \
+        "$RULE" -w "$WIDTH" -g "$GENERATIONS" --shape square -s "$SCALE" -d "$DISTRIBUTION" \
         --bg-from "$BG_FROM" --bg-to "$BG_TO" --fg-from "$FG_FROM" --fg-to "$FG_TO" \
         -o "$OUTPUT_DIR/$FILENAME"
 

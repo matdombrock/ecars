@@ -31,9 +31,9 @@ struct Args {
     #[arg(long, short = 'p', default_value_t = true)]
     pretty_print: bool,
 
-    /// Draw cells as circles instead of squares in PNG output
-    #[arg(long, default_value_t = false)]
-    circles: bool,
+    /// Shape to use for cells in PNG output (square, circle, triangle-up, triangle-down)
+    #[arg(long, default_value = "square")]
+    shape: String,
 
     /// Draw links between neighboring cells (post-processing)
     #[arg(long, default_value_t = false)]
@@ -106,7 +106,7 @@ fn main() {
             args.width,
             args.generations,
             args.scale,
-            args.circles,
+            &args.shape,
             args.links,
             &output_path,
             bg_from,

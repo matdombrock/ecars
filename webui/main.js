@@ -44,7 +44,7 @@ async function main() {
       random_distribution = parseFloat(randomDistStr);
     }
     const scale = parseInt(document.getElementById('scale').value, 10);
-    const circles = document.getElementById('circles').checked;
+    const shape = document.getElementById('shape').value;
     const links = document.getElementById('links').checked;
     const bg_from = document.getElementById('bg_from').value;
     const bg_to = document.getElementById('bg_to').value;
@@ -68,7 +68,7 @@ async function main() {
       generations,
       seed,
       scale,
-      circles,
+      shape,
       links,
       bg_from,
       bg_to,

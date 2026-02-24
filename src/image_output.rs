@@ -15,7 +15,7 @@ pub fn save_generations_as_png(
     width: usize,
     height: usize,
     scale: usize,
-    use_circles: bool,
+    shape: &str,
     use_links: bool,
     output_path: &str,
     bg_from: Rgb<u8>,
@@ -28,7 +28,7 @@ pub fn save_generations_as_png(
         width,
         height,
         scale,
-        use_circles,
+        shape,
         use_links,
         bg_from,
         bg_to,
@@ -48,7 +48,7 @@ pub fn generations_to_rgba_buffer(
     width: usize,
     height: usize,
     scale: usize,
-    use_circles: bool,
+    shape: &str,
     use_links: bool,
     bg_from: Rgb<u8>,
     bg_to: Rgb<u8>,
@@ -78,18 +78,34 @@ pub fn generations_to_rgba_buffer(
                 lerp_color(&bg_from, &bg_to, t)
             };
 
-            if use_circles {
-                let radius = scale as f32 * 0.5;
-                let center_x = x as f32 * scale as f32 + radius;
-                let center_y = y as f32 * scale as f32 + radius;
-                for dy in 0..scale {
-                    for dx in 0..scale {
-                        let px = x as f32 * scale as f32 + dx as f32 + 0.5;
-                        let py = y as f32 * scale as f32 + dy as f32 + 0.5;
-                        let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
-                        if dist <= radius {
-                            let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx)) * 4)
-                                as usize;
+            match shape {
+                "circle" => {
+                    let radius = scale as f32 * 0.5;
+                    let center_x = x as f32 * scale as f32 + radius;
+                    let center_y = y as f32 * scale as f32 + radius;
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let px = x as f32 * scale as f32 + dx as f32 + 0.5;
+                            let py = y as f32 * scale as f32 + dy as f32 + 0.5;
+                            let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
+                            if dist <= radius {
+                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                    * 4) as usize;
+                                buffer[idx] = color[0];
+                                buffer[idx + 1] = color[1];
+                                buffer[idx + 2] = color[2];
+                                buffer[idx + 3] = 255;
+                            }
+                        }
+                    }
+                }
+                "triangle-up" => {
+                    for dy in 0..scale {
+                        let row_width = ((dy as f32 / scale as f32) * scale as f32).ceil() as usize;
+                        let x_start = x * scale + (scale - row_width) / 2;
+                        let x_end = x_start + row_width;
+                        for dx in x_start..x_end {
+                            let idx = (((y * scale + dy) * (width * scale) + dx) * 4) as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
@@ -97,15 +113,32 @@ pub fn generations_to_rgba_buffer(
                         }
                     }
                 }
-            } else {
-                for dy in 0..scale {
-                    for dx in 0..scale {
-                        let idx =
-                            (((y * scale + dy) * (width * scale) + (x * scale + dx)) * 4) as usize;
-                        buffer[idx] = color[0];
-                        buffer[idx + 1] = color[1];
-                        buffer[idx + 2] = color[2];
-                        buffer[idx + 3] = 255;
+                "triangle-down" => {
+                    for dy in 0..scale {
+                        let row_width = (((scale - dy - 1) as f32 / scale as f32) * scale as f32)
+                            .ceil() as usize;
+                        let x_start = x * scale + (scale - row_width) / 2;
+                        let x_end = x_start + row_width;
+                        for dx in x_start..x_end {
+                            let idx = (((y * scale + dy) * (width * scale) + dx) * 4) as usize;
+                            buffer[idx] = color[0];
+                            buffer[idx + 1] = color[1];
+                            buffer[idx + 2] = color[2];
+                            buffer[idx + 3] = 255;
+                        }
+                    }
+                }
+                _ => {
+                    // default: square
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx)) * 4)
+                                as usize;
+                            buffer[idx] = color[0];
+                            buffer[idx + 1] = color[1];
+                            buffer[idx + 2] = color[2];
+                            buffer[idx + 3] = 255;
+                        }
                     }
                 }
             }
