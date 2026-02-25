@@ -10,15 +10,15 @@
 :root {
   --color-bg: #222;
   --font-size-base: 1rem;
-  --color-bg-light: #fff;
-  --color-bg-form: #f8f8fc;
-  --color-bg-canvas: #f3f3f8;
+  --color-bg-light: #333;
+  --color-bg-form: #282828;
+  --color-bg-canvas: #222;
   --color-text: #eee;
   --color-text-dark: #222;
-  --color-text-muted: #555;
-  --color-border: #eee;
-  --color-border-input: #ccc;
-  --color-border-canvas: #888;
+  --color-text-muted: #aaa;
+  --color-border: #444;
+  --color-border-input: #555;
+  --color-border-canvas: #555;
   --color-btn-gradient: linear-gradient(90deg, #ff66cc 40%, #aaffff 100%);
   --color-btn-gradient-hover: linear-gradient(90deg, #ff66cc 20%, #ffaaff 100%);
   --color-btn-random: linear-gradient(90deg, #00c9a7 40%, #aaffff 100%);
