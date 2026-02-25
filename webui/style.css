@@ -1,55 +1,61 @@
+@font-face {
+  font-family: 'Agave';
+  src: url('/AgaveNerdFontPropo-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Main layout */
 body {
-  background: #f7f7fa;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  margin: 0;
+  font-family: 'Agave', monospace;
+  background: #222;
+  margin: 2vw;
   padding: 0;
-  color: #222;
+  color: #eee;
 }
 
 .container {
-  max-width: 700px;
-  margin: 32px auto;
+  max-width: 50vw;
+  margin: 2vw auto;
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-  padding: 32px 24px 24px 24px;
+  border-radius: 0.85vw;
+  box-shadow: 0 0.3vw 2vw rgba(0, 0, 0, 0.07);
+  padding: 0 1.7vw 1.7vw 1.7vw;
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 1.7vw;
+  letter-spacing: 0.1vw;
 }
 
 h1 {
-  text-align: center;
-  margin-bottom: 24px;
-  font-size: 2rem;
-  letter-spacing: 1px;
-}
-
-h2 {
-  text-align: center;
-  margin-bottom: 24px;
-  letter-spacing: 1px;
+  font-size: 4vmin;
 }
 
 form#params {
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 2vw;
   justify-content: space-between;
-  margin-bottom: 32px;
+  margin-bottom: 2vw;
 }
 
 .form-section {
-  flex: 1 1 320px;
-  min-width: 220px;
+  flex: 1 1 23vw;
+  min-width: 16vw;
   background: #f8f8fc;
-  border-radius: 8px;
-  padding: 18px 18px 12px 18px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+  border-radius: 0.6vw;
+  padding: 1.3vw 1.3vw 0.85vw 1.3vw;
+  box-shadow: 0 0.7vw 1.7vw rgba(0, 0, 0, 0.03);
   margin-bottom: 0;
 }
 
 @media (max-width: 700px) {
   form#params {
     flex-direction: column;
-    gap: 18px;
+    gap: 1vw;
   }
 
   .form-section {
@@ -59,55 +65,56 @@ form#params {
   }
 }
 
-
 .form-section h2 {
-  font-size: 1.1rem;
-  margin-bottom: 12px;
+  font-size: 2.2vmin;
+  margin-bottom: 0.85vw;
   color: #555;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 4px;
+  border-bottom: 0.1vw solid #eee;
+  padding-bottom: 0.3vw;
 }
 
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
-  gap: 10px;
+  margin-bottom: 0.7vw;
+  gap: 0.7vw;
 }
 
 .form-row label {
-  flex: 1 1 120px;
-  font-size: 1rem;
+  flex: 1 1 8vw;
+  font-size: 2vmin;
+  display: block;
+  margin: 0.3vw 0;
 }
 
 .form-row input[type="number"],
 .form-row select,
 .form-row input[type="color"] {
-  flex: 0 0 90px;
-  max-width: 90px;
-  min-width: 60px;
-  padding: 4px 6px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+  flex: 0 0 6vw;
+  max-width: 6vw;
+  min-width: 4vw;
+  padding: 0.3vw 0.4vw;
+  border: 0.1vw solid #ccc;
+  border-radius: 0.3vw;
+  font-size: 2vmin;
   box-sizing: border-box;
 }
 
 .form-row input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+  width: 1.2vw;
+  height: 1.2vw;
 }
 
 button[type="submit"] {
   background: linear-gradient(90deg, #ff66cc 40%, #aaffff 100%);
   color: #222;
   border: none;
-  border-radius: 6px;
-  padding: 10px 28px;
-  font-size: 1.1rem;
+  border-radius: 0.4vw;
+  padding: 0.7vw 2vw;
+  font-size: 2.2vmin;
   font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  box-shadow: 0 0.3vw 1.7vw rgba(0, 0, 0, 0.07);
   transition: background 0.2s;
 }
 
@@ -115,19 +122,17 @@ button[type="submit"]:hover {
   background: linear-gradient(90deg, #ff66cc 20%, #ffaaff 100%);
 }
 
-
-
 .randomize-btn {
   background: linear-gradient(90deg, #00c9a7 40%, #aaffff 100%);
   color: #222;
   border: none;
-  border-radius: 6px;
-  padding: 10px 28px;
-  font-size: 1.1rem;
+  border-radius: 0.4vw;
+  padding: 0.7vw 2vw;
+  font-size: 2.2vmin;
   font-weight: 500;
   cursor: pointer;
-  margin-bottom: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+  margin-bottom: 0.6vw;
+  box-shadow: 0 0.3vw 1.7vw rgba(0, 0, 0, 0.07);
   transition: background 0.2s;
 }
 
@@ -138,7 +143,7 @@ button[type="submit"]:hover {
 .button-row {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.6vw;
 }
 
 .button-row button {
@@ -146,11 +151,10 @@ button[type="submit"]:hover {
   display: block;
 }
 
-
 #generating {
   display: none;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 2.2vmin;
   color: #555;
   position: fixed;
   /* top: 50%; */
@@ -159,10 +163,10 @@ button[type="submit"]:hover {
   transform: translate(-50%, 0%);
   background: rgba(255, 255, 255, 0.9);
   width: 100%;
-  padding-top: 5rem;
-  padding-bottom: 5rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  padding-top: 4vw;
+  padding-bottom: 4vw;
+  border-radius: 0.6vw;
+  box-shadow: 0 0.3vw 2vw rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
@@ -176,44 +180,33 @@ button[type="submit"]:hover {
   justify-content: center;
   align-items: center;
   background: #f3f3f8;
-  border-radius: 8px;
-  padding: 18px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border-radius: 0.6vw;
+  padding: 1.3vw;
+  box-shadow: 0 0.3vw 1.7vw rgba(0, 0, 0, 0.04);
 }
 
 canvas#output {
   background: #fff;
-  border: 1px solid #eee;
-  border-radius: 6px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 0.1vw solid #eee;
+  border-radius: 0.4vw;
+  box-shadow: 0 0.3vw 1.7vw rgba(0, 0, 0, 0.04);
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-body {
-  font-family: sans-serif;
-  margin: 2em;
-  background: #222;
-  color: #eee;
-}
-
 form {
-  margin-bottom: 1em;
+  margin-bottom: 1vw;
 }
 
 canvas {
-  border: 1px solid #888;
+  border: 0.2vw solid #888;
   background: #111;
 }
 
-label {
-  display: block;
-  margin: 0.5em 0;
-}
-
 button {
-  margin-top: 1em;
-  padding: 0.5em 1em;
-  font-size: 1em;
+  margin-top: 1vw;
+  padding: 0.3vw 1vw;
+  font-size: 2vmin;
+  font-family: 'Agave', monospace;
 }
