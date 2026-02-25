@@ -10,7 +10,27 @@ This project implements an elementary cellular automaton engine in Rust, with bo
 
 ---
 
+## Project Structure
+
+- `src/lib.rs`: Core automaton logic and WASM bindings.
+- `src/main.rs`: CLI entry point and argument parsing (using `clap`).
+- `src/image_output.rs`: Image generation and PNG output utilities.
+- `src/rng_utils.rs`: Deterministic and OS-based random number utilities.
+- `webui/`: WebAssembly-powered web UI (HTML, JS, CSS).
+- `pkg/`: WASM build output for the web UI.
+
+## Dependencies
+
+- Rust crates: `rand`, `image`, `wasm-bindgen`, `clap`, `getrandom`
+- Web: No external JS dependencies (uses native ES modules and WASM)
+
+## Output
+
+- CLI: Generates PNG images and/or pretty-prints automaton generations to the terminal.
+- Web UI: Renders automaton images in-browser and allows image download.
+
 ## CLI Usage
+
 
 Build the CLI:
 
