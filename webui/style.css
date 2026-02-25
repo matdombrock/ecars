@@ -93,6 +93,27 @@ form#params {
 
 @media (max-width: 700px) {
 
+  .form-row label,
+  .form-row input,
+  .form-row select,
+  .form-row input[type="color"],
+  .form-row input[type="number"],
+  .form-row input[type="text"],
+  button,
+  .randomize-btn {
+    font-size: 3.2vmin !important;
+  }
+
+  h1,
+  h2 {
+    font-size: 5vmin !important;
+  }
+
+  .form-section h2 {
+    font-size: 3.2vmin !important;
+  }
+
+
   .form-row input[type="number"],
   .form-row select,
   .form-row input[type="color"] {
