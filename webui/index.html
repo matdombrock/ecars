@@ -9,105 +9,106 @@
 </head>
 
 <body>
-  <div class="container">
-    <h1>ECARS</h1>
-    <h2>Elementary Cellular Automata</h2>
-    <form id="params">
-      <div class="form-section">
-        <h2>Automaton</h2>
-        <div class="form-row">
-          <label for="rule">Rule</label>
-          <input type="number" id="rule" min="0" max="255" value="110">
+  <div class="main-layout">
+    <div class="container">
+      <h1>Elementary Cellular Automata</h1>
+      <form id="params">
+        <div class="form-row button-row">
+          <button type="button" id="randomize" class="randomize-btn">Randomize</button>
+          <button type="submit" id="generate-btn">Generate</button>
+          <button id="download-image">Download Image</button>
         </div>
-        <div class="form-row">
-          <label for="random_distribution">Distribution</label>
-          <input type="number" step="0.01" min="0" max="1" id="random_distribution"
-            placeholder="0.0-1.0 or blank for center">
+        <div class="form-section">
+          <h2>Automaton</h2>
+          <div class="form-row">
+            <label for="rule">Rule</label>
+            <input type="number" id="rule" min="0" max="255" value="110">
+          </div>
+          <div class="form-row">
+            <label for="random_distribution">Distribution</label>
+            <input type="number" step="0.01" min="0" max="1" id="random_distribution"
+              placeholder="0.0-1.0 or blank for center">
+          </div>
+          <div class="form-row">
+            <label for="seed">Seed</label>
+            <input type="text" id="seed" placeholder="blank for random">
+          </div>
+          <div class="form-row">
+            <label for="width">Width</label>
+            <input type="number" id="width" min="1" max="2048" value="64">
+          </div>
+          <div class="form-row">
+            <label for="generations">Generations</label>
+            <input type="number" id="generations" min="1" max="2048" value="64">
+          </div>
         </div>
-        <div class="form-row">
-          <label for="seed">Seed</label>
-          <input type="text" id="seed" placeholder="blank for random">
+        <div class="form-section">
+          <h2>Visual</h2>
+          <div class="form-row">
+            <label for="scale">Scale</label>
+            <input type="number" id="scale" min="1" max="64" value="16">
+          </div>
+          <div class="form-row">
+            <label for="alive-shape">Alive Shape</label>
+            <select id="alive-shape">
+              <option value="square" selected>Square</option>
+              <option value="circle">Circle</option>
+              <option value="circle-small">Circle Small</option>
+              <option value="triangle-up">Tri Up (isosceles)</option>
+              <option value="triangle-down">Tri Down (isosceles)</option>
+              <option value="triangle-left">Tri Left (isosceles)</option>
+              <option value="triangle-right">Tri Right (isosceles)</option>
+              <option value="triangle-r-a">Tri R-A (right angle bottom-left)</option>
+              <option value="triangle-r-b">Tri R-B (right angle bottom-right)</option>
+              <option value="triangle-r-c">Tri R-C (right angle top-left)</option>
+              <option value="triangle-r-d">Tri R-D (right angle top-right)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="dead-shape">Dead Shape</label>
+            <select id="dead-shape">
+              <option value="square" selected>Square</option>
+              <option value="circle">Circle</option>
+              <option value="circle-small">Circle Small</option>
+              <option value="triangle-up">Tri Up (isosceles)</option>
+              <option value="triangle-down">Tri Down (isosceles)</option>
+              <option value="triangle-left">Tri Left (isosceles)</option>
+              <option value="triangle-right">Tri Right (isosceles)</option>
+              <option value="triangle-r-a">Tri R-A (right angle bottom-left)</option>
+              <option value="triangle-r-b">Tri R-B (right angle bottom-right)</option>
+              <option value="triangle-r-c">Tri R-C (right angle top-left)</option>
+              <option value="triangle-r-d">Tri R-D (right angle top-right)</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="links">Links</label>
+            <input type="checkbox" id="links">
+          </div>
+          <div class="form-row">
+            <label for="dead_color_from">Dead Start</label>
+            <input type="color" id="dead_color_from" value="#ffaaff">
+          </div>
+          <div class="form-row">
+            <label for="dead_color_to">Dead End</label>
+            <input type="color" id="dead_color_to" value="#000000">
+          </div>
+          <div class="form-row">
+            <label for="alive_color_from">Alive Start</label>
+            <input type="color" id="alive_color_from" value="#000000">
+          </div>
+          <div class="form-row">
+            <label for="alive_color_to">Alive End</label>
+            <input type="color" id="alive_color_to" value="#aaffff">
+          </div>
         </div>
-        <div class="form-row">
-          <label for="width">Width</label>
-          <input type="number" id="width" min="1" max="2048" value="64">
-        </div>
-        <div class="form-row">
-          <label for="generations">Generations</label>
-          <input type="number" id="generations" min="1" max="2048" value="64">
-        </div>
-      </div>
-      <div class="form-section">
-        <h2>Visual</h2>
-        <div class="form-row">
-          <label for="scale">Scale</label>
-          <input type="number" id="scale" min="1" max="64" value="16">
-        </div>
-        <div class="form-row">
-          <label for="alive-shape">Alive Shape</label>
-          <select id="alive-shape">
-            <option value="square" selected>Square</option>
-            <option value="circle">Circle</option>
-            <option value="circle-small">Circle Small</option>
-            <option value="triangle-up">Tri Up (isosceles)</option>
-            <option value="triangle-down">Tri Down (isosceles)</option>
-            <option value="triangle-left">Tri Left (isosceles)</option>
-            <option value="triangle-right">Tri Right (isosceles)</option>
-            <option value="triangle-r-a">Tri R-A (right angle bottom-left)</option>
-            <option value="triangle-r-b">Tri R-B (right angle bottom-right)</option>
-            <option value="triangle-r-c">Tri R-C (right angle top-left)</option>
-            <option value="triangle-r-d">Tri R-D (right angle top-right)</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="dead-shape">Dead Shape</label>
-          <select id="dead-shape">
-            <option value="square" selected>Square</option>
-            <option value="circle">Circle</option>
-            <option value="circle-small">Circle Small</option>
-            <option value="triangle-up">Tri Up (isosceles)</option>
-            <option value="triangle-down">Tri Down (isosceles)</option>
-            <option value="triangle-left">Tri Left (isosceles)</option>
-            <option value="triangle-right">Tri Right (isosceles)</option>
-            <option value="triangle-r-a">Tri R-A (right angle bottom-left)</option>
-            <option value="triangle-r-b">Tri R-B (right angle bottom-right)</option>
-            <option value="triangle-r-c">Tri R-C (right angle top-left)</option>
-            <option value="triangle-r-d">Tri R-D (right angle top-right)</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="links">Links</label>
-          <input type="checkbox" id="links">
-        </div>
-        <div class="form-row">
-          <label for="dead_color_from">Dead Start</label>
-          <input type="color" id="dead_color_from" value="#ffaaff">
-        </div>
-        <div class="form-row">
-          <label for="dead_color_to">Dead End</label>
-          <input type="color" id="dead_color_to" value="#000000">
-        </div>
-        <div class="form-row">
-          <label for="alive_color_from">Alive Start</label>
-          <input type="color" id="alive_color_from" value="#000000">
-        </div>
-        <div class="form-row">
-          <label for="alive_color_to">Alive End</label>
-          <input type="color" id="alive_color_to" value="#aaffff">
-        </div>
-      </div>
-      <div class="form-row button-row">
-        <button type="button" id="randomize" class="randomize-btn">Randomize</button>
-        <button type="submit">Generate</button>
-      </div>
-    </form>
-    <div class="canvas-container">
-      <div id="generating">simulating...</div>
-      <canvas id="output" width="512" height="256"></canvas>
+      </form>
     </div>
-  </div>
-  <div class="download-container">
-    <button id="download-image">Download Image</button>
+    <div class="canvas-area">
+      <div class="canvas-container">
+        <div id="generating">simulating...</div>
+        <canvas id="output" width="512" height="256"></canvas>
+      </div>
+    </div>
   </div>
   <script type="module" src="main.js"></script>
 </body>

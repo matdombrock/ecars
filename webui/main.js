@@ -54,8 +54,10 @@ async function main() {
   form.onsubmit = async (e) => {
     e.preventDefault();
     console.log('Generation Time');
-    const generatingEl = document.getElementById('generating');
-    generatingEl.style.display = 'block';
+    const genBtn = document.getElementById('generate-btn');
+    genBtn.disabled = true;
+    genBtn.textContent = 'Simulating';
+    genBtn.classList.add('simulating');
     await new Promise(requestAnimationFrame); // Force browser repaint
     await new Promise(resolve => setTimeout(resolve, 1)); // Ensure "Generating..." is visible before heavy computation
     const rule = parseInt(document.getElementById('rule').value, 10);
@@ -112,8 +114,9 @@ async function main() {
     const imageData = new ImageData(new Uint8ClampedArray(buffer), canvasWidth, canvasHeight);
     ctx.putImageData(imageData, 0, 0);
 
-    console.log('Generation over');
-    generatingEl.style.display = 'none';
+    genBtn.disabled = false;
+    genBtn.textContent = 'Generate';
+    genBtn.classList.remove('simulating');
   };
 
 }
