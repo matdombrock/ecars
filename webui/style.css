@@ -9,6 +9,7 @@
 /* CSS Variables */
 :root {
   --color-bg: #222;
+  --font-size-base: 1rem;
   --color-bg-light: #fff;
   --color-bg-form: #f8f8fc;
   --color-bg-canvas: #f3f3f8;
@@ -34,8 +35,13 @@
 }
 
 /* Main layout */
+html {
+  font-size: 13px;
+}
+
 body {
   font-family: 'Agave', monospace;
+  font-size: var(--font-size-base);
   background: var(--color-bg);
   margin: 0;
   padding: 0;
@@ -103,11 +109,14 @@ h2 {
   text-align: center;
   margin-bottom: 1.7vw;
   letter-spacing: 0.1vw;
+  font-size: 2rem;
 }
 
 h1 {
-  font-size: 4vmin;
+  font-size: 2.5rem;
 }
+
+
 
 form#params {
   display: flex;
@@ -127,12 +136,14 @@ form#params {
 }
 
 .form-section h2 {
-  font-size: 2.2vmin;
+  font-size: 1.3rem;
   margin-bottom: 0.85vw;
   color: var(--color-text-muted);
   border-bottom: 0.1vw solid var(--color-border);
   padding-bottom: 0.3vw;
 }
+
+
 
 .form-row {
   display: flex;
@@ -143,10 +154,12 @@ form#params {
 
 .form-row label {
   flex: 1 1 8vw;
-  font-size: 2vmin;
+  font-size: 1rem;
   display: block;
   margin: 0.3vw 0;
 }
+
+
 
 .form-row input[type="number"],
 .form-row select,
@@ -157,9 +170,11 @@ form#params {
   padding: 0.3vw 0.4vw;
   border: 0.1vw solid var(--color-border-input);
   border-radius: 0.3vw;
-  font-size: 2vmin;
+  font-size: 1rem;
   box-sizing: border-box;
 }
+
+
 
 .form-row input[type="checkbox"] {
   width: 1.2vw;
@@ -172,12 +187,14 @@ button[type="submit"] {
   border: none;
   border-radius: var(--radius-btn);
   padding: 0.7vw 2vw;
-  font-size: 2.2vmin;
+  font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
   box-shadow: var(--shadow-light);
   transition: background 0.2s;
 }
+
+
 
 button[type="submit"]:hover {
   background: var(--color-btn-gradient-hover);
@@ -189,12 +206,14 @@ button[type="submit"]:hover {
   border: none;
   border-radius: var(--radius-btn);
   padding: 0.7vw 2vw;
-  font-size: 2.2vmin;
+  font-size: 1.1rem;
   font-weight: 500;
   cursor: pointer;
   box-shadow: var(--shadow-light);
   transition: background 0.2s;
 }
+
+
 
 .randomize-btn:hover {
   background: var(--color-btn-random-hover);
@@ -253,10 +272,12 @@ button[type="submit"]:hover {
 
 .info {
   text-align: center;
-  font-size: 1vmin;
+  font-size: 0.85rem;
   color: var(--color-text-muted);
   margin-top: 1vw;
 }
+
+
 
 .info a {
   color: var(--color-text-muted);
@@ -276,14 +297,17 @@ canvas {
 
 button {
   padding: 0.3vw 1vw;
-  font-size: 2vmin;
+  font-size: 1rem;
   font-family: 'Agave', monospace;
 }
+
+
 
 
 /* Responsive styles */
 @media (max-width: 700px) {
   html {
+    font-size: 18px !important;
     overflow-x: hidden !important;
   }
 
@@ -388,10 +412,13 @@ button {
   .form-row select,
   .form-row input[type="color"],
   .form-row input[type="number"],
-  .form-row input[type="text"],
+  .form-row input[type="text"] {
+    font-size: 3.2vmin !important;
+  }
+
   button,
   .randomize-btn {
-    font-size: 3.2vmin !important;
+    font-size: 5.2vmin !important;
   }
 
   h1,
