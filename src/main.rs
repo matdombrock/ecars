@@ -11,6 +11,10 @@ struct Args {
     /// Rule number (0-255)
     rule: u8,
 
+    /// Random seed (u64, optional)
+    #[arg(long)]
+    seed: Option<u64>,
+
     /// Probability for random initial state (0.0-1.0), or 'none' for single center cell
     #[arg(long, short = 'd', default_value = "none")]
     random_distribution: String,
@@ -27,9 +31,17 @@ struct Args {
     #[arg(long, short = 'p', default_value_t = true)]
     pretty_print: bool,
 
-    /// Draw cells as circles instead of squares in PNG output
+    /// Shape to use for alive cells in PNG output
+    #[arg(long, default_value = "square")]
+    alive_shape: String,
+
+    /// Shape to use for dead cells in PNG output
+    #[arg(long, default_value = "square")]
+    dead_shape: String,
+
+    /// Draw links between neighboring cells (post-processing)
     #[arg(long, default_value_t = false)]
-    circles: bool,
+    links: bool,
 
     /// Scale factor for PNG output (each cell becomes scale x scale pixels)
     #[arg(long, short = 's', default_value_t = 1)]
@@ -39,25 +51,21 @@ struct Args {
     #[arg(long, short = 'o')]
     output: Option<String>,
 
-    /// Background color start
-    /// (Image only)
+    /// Start color for dead cells
     #[arg(long, default_value = "#ffaaff")]
-    bg_from: String,
+    dead_color_from: String,
 
-    /// Background color end
-    /// (Image only)
+    /// End color for dead cells
     #[arg(long, default_value = "#000000")]
-    bg_to: String,
+    dead_color_to: String,
 
-    /// Foreground color start
-    /// (Image only)
+    /// Start color for alive cells
     #[arg(long, default_value = "#000000")]
-    fg_from: String,
+    alive_color_from: String,
 
-    /// Foreground color end
-    /// (Image only)
+    /// End color for alive cells
     #[arg(long, default_value = "#aaffff")]
-    fg_to: String,
+    alive_color_to: String,
 }
 
 fn parse_hex_color(s: &str) -> Rgb<u8> {
@@ -75,25 +83,37 @@ fn main() {
         "none" => None,
         s => Some(s.parse().expect("Invalid random_distribution")),
     };
-    let generations_vec =
-        run_automaton(args.rule, random_distribution, args.width, args.generations);
+    let seed = args.seed;
+    let flat_vec = run_automaton(
+        args.rule,
+        random_distribution,
+        args.width,
+        args.generations,
+        seed,
+    );
+    let generations_vec: Vec<Vec<u8>> = flat_vec
+        .chunks(args.width)
+        .map(|chunk| chunk.to_vec())
+        .collect();
 
     if let Some(output_path) = args.output {
-        let bg_from = parse_hex_color(&args.bg_from);
-        let bg_to = parse_hex_color(&args.bg_to);
-        let fg_from = parse_hex_color(&args.fg_from);
-        let fg_to = parse_hex_color(&args.fg_to);
+        let dead_from = parse_hex_color(&args.dead_color_from);
+        let dead_to = parse_hex_color(&args.dead_color_to);
+        let alive_from = parse_hex_color(&args.alive_color_from);
+        let alive_to = parse_hex_color(&args.alive_color_to);
         image_output::save_generations_as_png(
             &generations_vec,
             args.width,
             args.generations,
             args.scale,
-            args.circles,
+            &args.alive_shape,
+            &args.dead_shape,
+            args.links,
             &output_path,
-            bg_from,
-            bg_to,
-            fg_from,
-            fg_to,
+            dead_from,
+            dead_to,
+            alive_from,
+            alive_to,
         );
     } else if args.pretty_print {
         for gen in generations_vec {

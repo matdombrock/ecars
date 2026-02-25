@@ -3,9 +3,19 @@ name = "ca"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+
 
 [dependencies]
 rand = "0.10.0"
-getrandom = "0.2"
+getrandom = { version = "0.2", features = ["js"] }
 clap = { version = "4", features = ["derive"] }
 image = "0.25.9"
+wasm-bindgen = "0.2"
+
+# Ensure getrandom v0.4 (used by some dependencies) has wasm_js feature for WASM builds
+getrandom_04 = { package = "getrandom", version = "0.4", features = ["wasm_js"] }
+
+

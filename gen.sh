@@ -4,7 +4,7 @@
 WIDTH=256
 GENERATIONS=256
 RULE=30
-CIRCLE_OPTION="--circles"
+SHAPE_OPTION="--shape square" # Change to desired shape: square, circle, triangle-up, triangle-down
 SCALE=8
 
 # Output directory
