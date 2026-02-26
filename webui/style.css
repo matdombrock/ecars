@@ -12,13 +12,13 @@
   --font-size-base: 1rem;
   --color-bg-light: #333;
   --color-bg-form: #282828;
-  --color-bg-canvas: #222;
+  --color-bg-canvas: #000;
   --color-text: #eee;
   --color-text-dark: #222;
   --color-text-muted: #aaa;
   --color-border: #444;
   --color-border-input: #555;
-  --color-border-canvas: #555;
+  --color-border-canvas: #222;
   --color-btn-gradient: linear-gradient(90deg, #ff66cc 40%, #aaffff 100%);
   --color-btn-gradient-hover: linear-gradient(90deg, #ff66cc 20%, #ffaaff 100%);
   --color-btn-random: linear-gradient(90deg, #00c9a7 40%, #aaffff 100%);
@@ -86,7 +86,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-canvas);
+  background: var(--color-bg-light);
   border-radius: var(--radius-small);
   padding: 1.3vw;
   box-shadow: var(--shadow-canvas);
@@ -98,7 +98,7 @@ canvas#output {
   height: auto;
   object-fit: contain;
   display: block;
-  background: var(--color-bg-light);
+  background: var(--color-bg-canvas);
   border: 0.1vw solid var(--color-border);
   border-radius: var(--radius-canvas);
   box-shadow: var(--shadow-canvas);
@@ -162,6 +162,7 @@ form#params {
 
 
 .form-row input[type="number"],
+.form-row input[type="text"],
 .form-row select,
 .form-row input[type="color"] {
   flex: 0 0 6vw;
@@ -172,6 +173,20 @@ form#params {
   border-radius: 0.3vw;
   font-size: 1rem;
   box-sizing: border-box;
+  background: var(--color-bg-form);
+  color: var(--color-text);
+}
+
+/* Hide number input spinners for Chrome, Safari, Edge */
+.form-row input[type="number"]::-webkit-inner-spin-button,
+.form-row input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number input spinners for Firefox */
+.form-row input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 
@@ -183,7 +198,7 @@ form#params {
 
 button[type="submit"] {
   background: var(--color-btn-gradient);
-  color: var(--color-text-dark);
+  color: var(--color-text);
   border: none;
   border-radius: var(--radius-btn);
   padding: 0.7vw 2vw;
@@ -248,10 +263,28 @@ button[type="submit"]:hover {
   z-index: 10;
 }
 
-.download-container {
-  text-align: center;
-  margin: 0 auto;
+button,
+.randomize-btn {
+  color: var(--color-text);
 }
+
+#download-image {
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 0.7vw 2vw;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: background 0.2s;
+}
+
+#download-image:hover {
+  background: var(--color-border);
+}
+
 
 @keyframes pulse {
   0% {
