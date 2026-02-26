@@ -10,7 +10,7 @@
 :root {
   --color-bg: #222;
   --font-size-base: 1rem;
-  --color-bg-light: #333;
+  --color-bg2: #333;
   --color-bg-form: #282828;
   --color-bg-canvas: #000;
   --color-text: #eee;
@@ -19,10 +19,10 @@
   --color-border: #444;
   --color-border-input: #555;
   --color-border-canvas: #222;
-  --color-btn-gradient: linear-gradient(90deg, #ff66cc 40%, #aaffff 100%);
-  --color-btn-gradient-hover: linear-gradient(90deg, #ff66cc 20%, #ffaaff 100%);
-  --color-btn-random: linear-gradient(90deg, #00c9a7 40%, #aaffff 100%);
-  --color-btn-random-hover: linear-gradient(90deg, #00c9a7 20%, #aaffff 100%);
+  --color-btn-gradient: linear-gradient(90deg, #ee55bb 40%, #5c2b8c 100%);
+  --color-btn-gradient-hover: linear-gradient(90deg, #ee55bb 20%, #ee99ee 100%);
+  --color-btn-random: linear-gradient(90deg, #00b896 40%, #494a8c 100%);
+  --color-btn-random-hover: linear-gradient(90deg, #00b896 20%, #99eeee 100%);
   --radius: 0.85vw;
   --radius-small: 0.6vw;
   --radius-btn: 0.4vw;
@@ -62,7 +62,7 @@ body {
   min-width: 250px;
   max-width: 400px;
   height: 100vh;
-  background: var(--color-bg-light);
+  background: var(--color-bg2);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 0 1.7vw 1.7vw 1.7vw;
@@ -86,7 +86,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-bg-light);
+  background: var(--color-bg2);
   border-radius: var(--radius-small);
   padding: 1.3vw;
   box-shadow: var(--shadow-canvas);
