@@ -74,6 +74,7 @@ async function main() {
     const links = document.getElementById('links').checked;
     const mirror_x = document.getElementById('mirror_x').checked;
     const mirror_y = document.getElementById('mirror_y').checked;
+    const mirror_share_center = document.getElementById('mirror_share_center').checked;
     const dead_color_from = document.getElementById('dead_color_from').value;
     const dead_color_to = document.getElementById('dead_color_to').value;
     const alive_color_from = document.getElementById('alive_color_from').value;
@@ -102,7 +103,10 @@ async function main() {
       dead_color_from,
       dead_color_to,
       alive_color_from,
-      alive_color_to
+      alive_color_to,
+      mirror_x,
+      mirror_y,
+      mirror_share_center
     );
 
     // Always resize canvas to fit the full automaton
