@@ -23,6 +23,8 @@ pub fn save_generations_as_png(
     bg_to: Rgb<u8>,
     fg_from: Rgb<u8>,
     fg_to: Rgb<u8>,
+    mirror_x: bool,
+    mirror_y: bool,
 ) {
     let buffer = generations_to_rgba_buffer(
         generations,
