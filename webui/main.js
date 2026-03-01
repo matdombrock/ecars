@@ -72,6 +72,8 @@ async function main() {
     const alive_shape = document.getElementById('alive-shape').value;
     const dead_shape = document.getElementById('dead-shape').value;
     const links = document.getElementById('links').checked;
+    const mirror_x = document.getElementById('mirror_x').checked;
+    const mirror_y = document.getElementById('mirror_y').checked;
     const dead_color_from = document.getElementById('dead_color_from').value;
     const dead_color_to = document.getElementById('dead_color_to').value;
     const alive_color_from = document.getElementById('alive_color_from').value;
