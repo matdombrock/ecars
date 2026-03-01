@@ -66,6 +66,11 @@ pub fn generations_to_rgba_buffer(
 
     for (y, gen) in generations.iter().enumerate() {
         for (x, &cell) in gen.iter().enumerate() {
+            // Apply mirroring by mapping source coords to display coords
+            let disp_x = if mirror_x { width - 1 - x } else { x };
+            let disp_y = if mirror_y { height - 1 - y } else { y };
+            let base_x = disp_x * scale;
+            let base_y = disp_y * scale;
             let fx = if width > 1 {
                 x as f32 / (width - 1) as f32
             } else {
@@ -86,15 +91,15 @@ pub fn generations_to_rgba_buffer(
             match shape {
                 "circle" => {
                     let radius = scale as f32 * 0.5;
-                    let center_x = x as f32 * scale as f32 + radius;
-                    let center_y = y as f32 * scale as f32 + radius;
+                    let center_x = disp_x as f32 * scale as f32 + radius;
+                    let center_y = disp_y as f32 * scale as f32 + radius;
                     for dy in 0..scale {
                         for dx in 0..scale {
-                            let px = x as f32 * scale as f32 + dx as f32 + 0.5;
-                            let py = y as f32 * scale as f32 + dy as f32 + 0.5;
+                            let px = disp_x as f32 * scale as f32 + dx as f32 + 0.5;
+                            let py = disp_y as f32 * scale as f32 + dy as f32 + 0.5;
                             let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
                             if dist <= radius {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -106,15 +111,15 @@ pub fn generations_to_rgba_buffer(
                 }
                 "circle-small" => {
                     let radius = scale as f32 * 0.25;
-                    let center_x = x as f32 * scale as f32 + scale as f32 * 0.5;
-                    let center_y = y as f32 * scale as f32 + scale as f32 * 0.5;
+                    let center_x = disp_x as f32 * scale as f32 + scale as f32 * 0.5;
+                    let center_y = disp_y as f32 * scale as f32 + scale as f32 * 0.5;
                     for dy in 0..scale {
                         for dx in 0..scale {
-                            let px = x as f32 * scale as f32 + dx as f32 + 0.5;
-                            let py = y as f32 * scale as f32 + dy as f32 + 0.5;
+                            let px = disp_x as f32 * scale as f32 + dx as f32 + 0.5;
+                            let py = disp_y as f32 * scale as f32 + dy as f32 + 0.5;
                             let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
                             if dist <= radius {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -130,7 +135,7 @@ pub fn generations_to_rgba_buffer(
                         let x_start = x * scale + (scale - row_width) / 2;
                         let x_end = x_start + row_width;
                         for dx in x_start..x_end {
-                            let idx = (((y * scale + dy) * (width * scale) + dx) * 4) as usize;
+                            let idx = (((base_y + dy) * (width * scale) + dx) * 4) as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
@@ -145,7 +150,7 @@ pub fn generations_to_rgba_buffer(
                         let x_start = x * scale + (scale - row_width) / 2;
                         let x_end = x_start + row_width;
                         for dx in x_start..x_end {
-                            let idx = (((y * scale + dy) * (width * scale) + dx) * 4) as usize;
+                            let idx = (((base_y + dy) * (width * scale) + dx) * 4) as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
@@ -159,7 +164,7 @@ pub fn generations_to_rgba_buffer(
                             ((dx as f32 / scale as f32) * scale as f32).ceil() as usize;
                         let y_start = y * scale + (scale - col_height) / 2;
                         for dy in y_start..(y_start + col_height) {
-                            let idx = (((dy) * (width * scale) + (x * scale + dx)) * 4) as usize;
+                            let idx = (((dy) * (width * scale) + (base_x + dx)) * 4) as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
@@ -173,7 +178,7 @@ pub fn generations_to_rgba_buffer(
                             .ceil() as usize;
                         let y_start = y * scale + (scale - col_height) / 2;
                         for dy in y_start..(y_start + col_height) {
-                            let idx = (((dy) * (width * scale) + (x * scale + dx)) * 4) as usize;
+                            let idx = (((dy) * (width * scale) + (base_x + dx)) * 4) as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
                             buffer[idx + 2] = color[2];
@@ -186,7 +191,7 @@ pub fn generations_to_rgba_buffer(
                     for dy in 0..scale {
                         for dx in 0..scale {
                             if dx <= dy {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -201,7 +206,7 @@ pub fn generations_to_rgba_buffer(
                     for dy in 0..scale {
                         for dx in 0..scale {
                             if dx >= scale - dy - 1 {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -216,7 +221,7 @@ pub fn generations_to_rgba_buffer(
                     for dy in 0..scale {
                         for dx in 0..scale {
                             if dx >= dy {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -231,7 +236,7 @@ pub fn generations_to_rgba_buffer(
                     for dy in 0..scale {
                         for dx in 0..scale {
                             if dx <= scale - dy - 1 {
-                                let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx))
+                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
                                     * 4) as usize;
                                 buffer[idx] = color[0];
                                 buffer[idx + 1] = color[1];
@@ -245,7 +250,7 @@ pub fn generations_to_rgba_buffer(
                     // default: square
                     for dy in 0..scale {
                         for dx in 0..scale {
-                            let idx = (((y * scale + dy) * (width * scale) + (x * scale + dx)) * 4)
+                            let idx = (((base_y + dy) * (width * scale) + (base_x + dx)) * 4)
                                 as usize;
                             buffer[idx] = color[0];
                             buffer[idx + 1] = color[1];
@@ -269,6 +274,8 @@ pub fn generations_to_rgba_buffer(
             alive_to,
             dead_from,
             dead_to,
+            mirror_x,
+            mirror_y,
         );
     }
     buffer
@@ -285,6 +292,8 @@ fn draw_links_bresenham_rgba(
     fg_to: Rgb<u8>,
     bg_from: Rgb<u8>,
     bg_to: Rgb<u8>,
+    mirror_x: bool,
+    mirror_y: bool,
 ) {
     let thickness = ((scale as i32) / 8).max(1);
     let img_width = (width * scale) as i32;
