@@ -62,226 +62,90 @@ pub fn generations_to_rgba_buffer(
     mirror_x: bool,
     mirror_y: bool,
 ) -> Vec<u8> {
-    let img_width = (width * scale) as u32;
-    let img_height = (height * scale) as u32;
-    let mut buffer = vec![0u8; (img_width * img_height * 4) as usize];
+    // Render source buffer at original size
+    let src_w = width * scale;
+    let src_h = height * scale;
+    let mut src_buf = vec![0u8; src_w * src_h * 4];
+
+    // Helper to write pixel into src_buf
+    let mut write_pixel = |bx: usize, by: usize, color: Rgb<u8>, buf: &mut [u8]| {
+        if bx >= src_w || by >= src_h { return; }
+        let idx = (by * src_w + bx) * 4;
+        buf[idx] = color[0];
+        buf[idx+1] = color[1];
+        buf[idx+2] = color[2];
+        buf[idx+3] = 255;
+    };
 
     for (y, gen) in generations.iter().enumerate() {
         for (x, &cell) in gen.iter().enumerate() {
-            // Apply mirroring by mapping source coords to display coords
-            let disp_x = if mirror_x { width - 1 - x } else { x };
-            let disp_y = if mirror_y { height - 1 - y } else { y };
-            let base_x = disp_x * scale;
-            let base_y = disp_y * scale;
-            let fx = if width > 1 {
-                x as f32 / (width - 1) as f32
-            } else {
-                0.0
-            };
-            let fy = if height > 1 {
-                y as f32 / (height - 1) as f32
-            } else {
-                0.0
-            };
+            let fx = if width > 1 { x as f32 / (width - 1) as f32 } else { 0.0 };
+            let fy = if height > 1 { y as f32 / (height - 1) as f32 } else { 0.0 };
             let t = (fx + fy) / 2.0;
-            let (color, shape) = if cell == 1 {
-                (lerp_color(&alive_from, &alive_to, t), alive_shape)
-            } else {
-                (lerp_color(&dead_from, &dead_to, t), dead_shape)
-            };
-
+            let (color, shape) = if cell == 1 { (lerp_color(&alive_from, &alive_to, t), alive_shape) } else { (lerp_color(&dead_from, &dead_to, t), dead_shape) };
+            let base_x = x * scale;
+            let base_y = y * scale;
             match shape {
                 "circle" => {
                     let radius = scale as f32 * 0.5;
-                    let center_x = disp_x as f32 * scale as f32 + radius;
-                    let center_y = disp_y as f32 * scale as f32 + radius;
+                    let center_x = base_x as f32 + radius;
+                    let center_y = base_y as f32 + radius;
                     for dy in 0..scale {
                         for dx in 0..scale {
-                            let px = disp_x as f32 * scale as f32 + dx as f32 + 0.5;
-                            let py = disp_y as f32 * scale as f32 + dy as f32 + 0.5;
+                            let px = base_x as f32 + dx as f32 + 0.5;
+                            let py = base_y as f32 + dy as f32 + 0.5;
                             let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
                             if dist <= radius {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
-                            }
-                        }
-                    }
-                }
-                "circle-small" => {
-                    let radius = scale as f32 * 0.25;
-                    let center_x = disp_x as f32 * scale as f32 + scale as f32 * 0.5;
-                    let center_y = disp_y as f32 * scale as f32 + scale as f32 * 0.5;
-                    for dy in 0..scale {
-                        for dx in 0..scale {
-                            let px = disp_x as f32 * scale as f32 + dx as f32 + 0.5;
-                            let py = disp_y as f32 * scale as f32 + dy as f32 + 0.5;
-                            let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
-                            if dist <= radius {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
-                            }
-                        }
-                    }
-                }
-                "triangle-up" | "triangle-r-up" => {
-                    for dy in 0..scale {
-                        let row_width = ((dy as f32 / scale as f32) * scale as f32).ceil() as usize;
-                        let x_start = x * scale + (scale - row_width) / 2;
-                        let x_end = x_start + row_width;
-                        for dx in x_start..x_end {
-                            let idx = (((base_y + dy) * (width * scale) + dx) * 4) as usize;
-                            buffer[idx] = color[0];
-                            buffer[idx + 1] = color[1];
-                            buffer[idx + 2] = color[2];
-                            buffer[idx + 3] = 255;
-                        }
-                    }
-                }
-                "triangle-down" | "triangle-r-down" => {
-                    for dy in 0..scale {
-                        let row_width = (((scale - dy - 1) as f32 / scale as f32) * scale as f32)
-                            .ceil() as usize;
-                        let x_start = x * scale + (scale - row_width) / 2;
-                        let x_end = x_start + row_width;
-                        for dx in x_start..x_end {
-                            let idx = (((base_y + dy) * (width * scale) + dx) * 4) as usize;
-                            buffer[idx] = color[0];
-                            buffer[idx + 1] = color[1];
-                            buffer[idx + 2] = color[2];
-                            buffer[idx + 3] = 255;
-                        }
-                    }
-                }
-                "triangle-left" => {
-                    for dx in 0..scale {
-                        let col_height =
-                            ((dx as f32 / scale as f32) * scale as f32).ceil() as usize;
-                        let y_start = y * scale + (scale - col_height) / 2;
-                        for dy in y_start..(y_start + col_height) {
-                            let idx = (((dy) * (width * scale) + (base_x + dx)) * 4) as usize;
-                            buffer[idx] = color[0];
-                            buffer[idx + 1] = color[1];
-                            buffer[idx + 2] = color[2];
-                            buffer[idx + 3] = 255;
-                        }
-                    }
-                }
-                "triangle-right" => {
-                    for dx in 0..scale {
-                        let col_height = (((scale - dx - 1) as f32 / scale as f32) * scale as f32)
-                            .ceil() as usize;
-                        let y_start = y * scale + (scale - col_height) / 2;
-                        for dy in y_start..(y_start + col_height) {
-                            let idx = (((dy) * (width * scale) + (base_x + dx)) * 4) as usize;
-                            buffer[idx] = color[0];
-                            buffer[idx + 1] = color[1];
-                            buffer[idx + 2] = color[2];
-                            buffer[idx + 3] = 255;
-                        }
-                    }
-                }
-                "triangle-r-a" => {
-                    // Right angle at bottom-left (0, scale-1)
-                    for dy in 0..scale {
-                        for dx in 0..scale {
-                            if dx <= dy {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
-                            }
-                        }
-                    }
-                }
-                "triangle-r-b" => {
-                    // Right angle at bottom-right (scale-1, scale-1)
-                    for dy in 0..scale {
-                        for dx in 0..scale {
-                            if dx >= scale - dy - 1 {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
-                            }
-                        }
-                    }
-                }
-                "triangle-r-c" => {
-                    // Right angle at top-left (0, 0)
-                    for dy in 0..scale {
-                        for dx in 0..scale {
-                            if dx >= dy {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
-                            }
-                        }
-                    }
-                }
-                "triangle-r-d" => {
-                    // Right angle at top-right (scale-1, 0)
-                    for dy in 0..scale {
-                        for dx in 0..scale {
-                            if dx <= scale - dy - 1 {
-                                let idx = (((base_y + dy) * (width * scale) + (base_x + dx))
-                                    * 4) as usize;
-                                buffer[idx] = color[0];
-                                buffer[idx + 1] = color[1];
-                                buffer[idx + 2] = color[2];
-                                buffer[idx + 3] = 255;
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
                             }
                         }
                     }
                 }
                 _ => {
-                    // default: square
                     for dy in 0..scale {
                         for dx in 0..scale {
-                            let idx = (((base_y + dy) * (width * scale) + (base_x + dx)) * 4)
-                                as usize;
-                            buffer[idx] = color[0];
-                            buffer[idx + 1] = color[1];
-                            buffer[idx + 2] = color[2];
-                            buffer[idx + 3] = 255;
+                            write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
                         }
                     }
                 }
             }
         }
     }
-    // Draw links if requested (post-processing)
+
+    // Draw links into src_buf if requested
     if use_links {
-        draw_links_bresenham_rgba(
-            &mut buffer,
-            generations,
-            width,
-            height,
-            scale,
-            alive_from,
-            alive_to,
-            dead_from,
-            dead_to,
-            mirror_x,
-            mirror_y,
-        );
+        draw_links_bresenham_rgba(&mut src_buf, generations, width, height, scale, alive_from, alive_to, dead_from, dead_to, false, false);
     }
-    buffer
+
+    // Determine destination size
+    let dst_w = if mirror_x { src_w * 2 } else { src_w };
+    let dst_h = if mirror_y { src_h * 2 } else { src_h };
+    let mut dst_buf = vec![0u8; dst_w * dst_h * 4];
+
+    // Helper to copy pixel from src to dst
+    let copy_pixel = |sx: usize, sy: usize, dx: usize, dy: usize, s: &Vec<u8>, d: &mut Vec<u8>| {
+        let sidx = (sy * src_w + sx) * 4;
+        let didx = (dy * dst_w + dx) * 4;
+        d[didx..didx+4].copy_from_slice(&s[sidx..sidx+4]);
+    };
+
+    // Blit src into dst and mirrored copies
+    for sy in 0..src_h {
+        for sx in 0..src_w {
+            let dst_xs = if mirror_x { vec![sx, src_w * 2 - 1 - sx] } else { vec![sx] };
+            for &dx in &dst_xs {
+                let dst_ys = if mirror_y { vec![sy, src_h * 2 - 1 - sy] } else { vec![sy] };
+                for &dy in &dst_ys {
+                    copy_pixel(sx, sy, dx, dy, &src_buf, &mut dst_buf);
+                }
+            }
+        }
+    }
+
+    dst_buf
 }
+
+
 
 /// Draw links between neighboring "on" cells in an RGBA buffer using Bresenham's algorithm
 fn draw_links_bresenham_rgba(
