@@ -118,8 +118,8 @@ pub fn generations_to_rgba_buffer(
     }
 
     // Determine destination size
-    let dst_w = if mirror_x { src_w * 2 } else { src_w };
-    let dst_h = if mirror_y { src_h * 2 } else { src_h };
+    let dst_w = if mirror_x { src_w * 2 - if mirror_share_center { scale } else { 0 } } else { src_w };
+    let dst_h = if mirror_y { src_h * 2 - if mirror_share_center { scale } else { 0 } } else { src_h };
     let mut dst_buf = vec![0u8; dst_w * dst_h * 4];
 
     // Helper to copy pixel from src to dst
@@ -129,14 +129,27 @@ pub fn generations_to_rgba_buffer(
         d[didx..didx+4].copy_from_slice(&s[sidx..sidx+4]);
     };
 
-    // Blit src into dst and mirrored copies
+    // Blit src into dst and mirrored copies. If mirror_share_center is true, the mirrored copy starts after the shared center.
     for sy in 0..src_h {
         for sx in 0..src_w {
-            let dst_xs = if mirror_x { vec![sx, src_w * 2 - 1 - sx] } else { vec![sx] };
-            for &dx in &dst_xs {
-                let dst_ys = if mirror_y { vec![sy, src_h * 2 - 1 - sy] } else { vec![sy] };
-                for &dy in &dst_ys {
-                    copy_pixel(sx, sy, dx, dy, &src_buf, &mut dst_buf);
+            // primary copy
+            copy_pixel(sx, sy, sx, sy, &src_buf, &mut dst_buf);
+            if mirror_x {
+                let mirror_offset_x = if mirror_share_center { src_w - scale } else { 0 };
+                let mx = mirror_offset_x + (src_w - 1 - sx);
+                copy_pixel(sx, sy, mx, sy, &src_buf, &mut dst_buf);
+            }
+            if mirror_y {
+                let mirror_offset_y = if mirror_share_center { src_h - scale } else { 0 };
+                let my = mirror_offset_y + (src_h - 1 - sy);
+                copy_pixel(sx, sy, sx, my, &src_buf, &mut dst_buf);
+                if mirror_x {
+                    // both axes: mirrored in both directions
+                    let mirror_offset_x = if mirror_share_center { src_w - scale } else { 0 };
+                    let mx = mirror_offset_x + (src_w - 1 - sx);
+                    let mirror_offset_y = if mirror_share_center { src_h - scale } else { 0 };
+                    let my = mirror_offset_y + (src_h - 1 - sy);
+                    copy_pixel(sx, sy, mx, my, &src_buf, &mut dst_buf);
                 }
             }
         }
