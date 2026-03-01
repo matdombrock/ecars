@@ -66,6 +66,13 @@ struct Args {
     /// End color for alive cells
     #[arg(long, default_value = "#aaffff")]
     alive_color_to: String,
+    /// Mirror horizontally (flip left-right)
+    #[arg(long, default_value_t = false)]
+    mirror_x: bool,
+
+    /// Mirror vertically (flip top-bottom)
+    #[arg(long, default_value_t = false)]
+    mirror_y: bool,
 }
 
 fn parse_hex_color(s: &str) -> Rgb<u8> {
@@ -114,6 +121,8 @@ fn main() {
             dead_to,
             alive_from,
             alive_to,
+            args.mirror_x,
+            args.mirror_y,
         );
     } else if args.pretty_print {
         for gen in generations_vec {
