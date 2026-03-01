@@ -66,6 +66,9 @@ Run the CLI:
 - `--fg_from <hex>`: Foreground color start (default: #000000)
 - `--fg_to <hex>`: Foreground color end (default: #aaffff)
 
+- `--mirror-x`: Mirror image horizontally (flip left-right)
+- `--mirror-y`: Mirror image vertically (flip top-bottom)
+
 Example:
 
 ```bash
