@@ -57,6 +57,8 @@ pub fn generations_to_rgba_buffer(
     dead_to: Rgb<u8>,
     alive_from: Rgb<u8>,
     alive_to: Rgb<u8>,
+    mirror_x: bool,
+    mirror_y: bool,
 ) -> Vec<u8> {
     let img_width = (width * scale) as u32;
     let img_height = (height * scale) as u32;
