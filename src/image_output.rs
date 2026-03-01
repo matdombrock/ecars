@@ -337,9 +337,11 @@ fn draw_links_bresenham_rgba(
                 {
                     let neighbor_val = generations[ny as usize][nx as usize];
                     if neighbor_val == cell_val {
+                        let ndx = if mirror_x { (width - 1 - nx as usize) as i32 } else { nx as i32 };
+                        let ndy = if mirror_y { (height - 1 - ny as usize) as i32 } else { ny as i32 };
                         let (ncx, ncy) = (
-                            (nx as i32 * scale as i32 + scale as i32 / 2),
-                            (ny as i32 * scale as i32 + scale as i32 / 2),
+                            (ndx * scale as i32 + scale as i32 / 2),
+                            (ndy * scale as i32 + scale as i32 / 2),
                         );
                         let debug_color = if cell_val == 1 {
                             // Invert FG gradient for alive links
