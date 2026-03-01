@@ -74,6 +74,7 @@ pub fn generate_automaton_image(
     fg_to: &str,
     mirror_x: bool,
     mirror_y: bool,
+    mirror_share_center: bool,
 ) -> Vec<u8> {
     let mut rng = seeded_small_rng(seed);
     let mut current = vec![0u8; width];
@@ -121,5 +122,6 @@ pub fn generate_automaton_image(
         alive_to,
         mirror_x,
         mirror_y,
+        mirror_share_center,
     )
 }
