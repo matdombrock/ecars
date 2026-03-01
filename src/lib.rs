@@ -119,5 +119,7 @@ pub fn generate_automaton_image(
         dead_to,
         alive_from,
         alive_to,
+        mirror_x,
+        mirror_y,
     )
 }
