@@ -60,6 +60,7 @@ Run the CLI:
 - `--dead-color-to <hex>`: End color for dead cells (default: #000000)
 - `--links`: Draw links between cells
 - `--scale <usize>`: Scale factor for PNG output (default: 1)
+- `--auto-scale`: If set, compute scale so the final image width is as close to 2048px as possible (overrides --scale)
 - `--output <file>`: Output PNG file (optional)
 - `--bg_from <hex>`: Background color start (default: #ffaaff)
 - `--bg_to <hex>`: Background color end (default: #000000)

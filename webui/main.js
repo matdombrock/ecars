@@ -68,7 +68,13 @@ async function main() {
     if (randomDistStr !== '') {
       random_distribution = parseFloat(randomDistStr);
     }
-    const scale = parseInt(document.getElementById('scale').value, 10);
+    let scale = parseInt(document.getElementById('scale').value, 10);
+    const autoScaleEl = document.getElementById('auto_scale');
+    const auto_scale = autoScaleEl && autoScaleEl.checked;
+    if (auto_scale) {
+      // Compute scale so final image width ~2048px
+      scale = Math.max(1, Math.round(2048 / width));
+    }
     const alive_shape = document.getElementById('alive-shape').value;
     const dead_shape = document.getElementById('dead-shape').value;
     const links = document.getElementById('links').checked;

@@ -47,6 +47,10 @@ struct Args {
     #[arg(long, short = 's', default_value_t = 1)]
     scale: usize,
 
+    /// Automatically choose scale so the final image is as close to 2048px wide as possible
+    #[arg(long, default_value_t = false)]
+    auto_scale: bool,
+
     /// Output PNG file
     #[arg(long, short = 'o')]
     output: Option<String>,
@@ -108,11 +112,18 @@ fn main() {
         let dead_to = parse_hex_color(&args.dead_color_to);
         let alive_from = parse_hex_color(&args.alive_color_from);
         let alive_to = parse_hex_color(&args.alive_color_to);
+        // Compute effective scale if auto_scale is requested
+        let effective_scale = if args.auto_scale {
+            let computed = ((2048.0f32 / args.width as f32).round() as isize).max(1) as usize;
+            computed
+        } else {
+            args.scale
+        };
         image_output::save_generations_as_png(
             &generations_vec,
             args.width,
             args.generations,
-            args.scale,
+            effective_scale,
             &args.alive_shape,
             &args.dead_shape,
             args.links,
