@@ -89,6 +89,13 @@ pub fn generations_to_rgba_buffer(
             let base_x = x * scale;
             let base_y = y * scale;
             match shape {
+                "square" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                        }
+                    }
+                }
                 "circle" => {
                     let radius = scale as f32 * 0.5;
                     let center_x = base_x as f32 + radius;
@@ -104,7 +111,120 @@ pub fn generations_to_rgba_buffer(
                         }
                     }
                 }
+                "circle-small" => {
+                    let radius = scale as f32 * 0.4;
+                    let center_x = base_x as f32 + scale as f32 * 0.5;
+                    let center_y = base_y as f32 + scale as f32 * 0.5;
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let px = base_x as f32 + dx as f32 + 0.5;
+                            let py = base_y as f32 + dy as f32 + 0.5;
+                            let dist = ((px - center_x).powi(2) + (py - center_y).powi(2)).sqrt();
+                            if dist <= radius {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-up" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32; // 0..1 left->right
+                            let ny = (dy as f32 + 0.5) / scale as f32; // 0..1 top->bottom
+                            // isosceles pointing up: include if ny >= 2*abs(nx-0.5)
+                            if ny >= 2.0 * (nx - 0.5).abs() {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-down" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // pointing down: invert ny
+                            if ny <= 1.0 - 2.0 * (nx - 0.5).abs() {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-left" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // left-pointing isosceles: include if nx <= 2*abs(ny-0.5)
+                            if nx <= 2.0 * (ny - 0.5).abs() {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-right" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // right-pointing
+                            if nx >= 1.0 - 2.0 * (ny - 0.5).abs() {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                // Right-angle variants: r-a = bottom-left, r-b = bottom-right, r-c = top-left, r-d = top-right
+                "triangle-r-a" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // bottom-left: include if ny >= 1.0 - nx
+                            if ny >= 1.0 - nx {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-r-b" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // bottom-right: include if ny >= nx
+                            if ny >= nx {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-r-c" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // top-left: include if ny <= nx
+                            if ny <= nx {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
+                "triangle-r-d" => {
+                    for dy in 0..scale {
+                        for dx in 0..scale {
+                            let nx = (dx as f32 + 0.5) / scale as f32;
+                            let ny = (dy as f32 + 0.5) / scale as f32;
+                            // top-right: include if ny <= 1.0 - nx
+                            if ny <= 1.0 - nx {
+                                write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
+                            }
+                        }
+                    }
+                }
                 _ => {
+                    // default to square fill
                     for dy in 0..scale {
                         for dx in 0..scale {
                             write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
