@@ -89,8 +89,8 @@ async function main() {
       }
     }
 
-    // Call new WASM function to generate RGBA buffer
-    const buffer = generate_automaton_image(
+    // Call new WASM function to generate RGBA buffer (prepends 8-byte header: u32 width, u32 height)
+    const fullBuf = generate_automaton_image(
       rule,
       random_distribution,
       width,
@@ -109,15 +109,20 @@ async function main() {
       mirror_share_center
     );
 
-    // Always resize canvas to fit the full automaton
-    const canvasWidth = width * scale;
-    const canvasHeight = generations * scale;
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    // fullBuf is a Uint8Array with first 8 bytes = [width_le_u32, height_le_u32]
+    const header = fullBuf.slice(0, 8);
+    const data = fullBuf.slice(8);
+    const view = new DataView(header.buffer, header.byteOffset, header.byteLength);
+    const imgWidth = view.getUint32(0, true);
+    const imgHeight = view.getUint32(4, true);
+
+    // Resize canvas to fit the returned image
+    canvas.width = imgWidth;
+    canvas.height = imgHeight;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Render RGBA buffer to canvas
-    const imageData = new ImageData(new Uint8ClampedArray(buffer), canvasWidth, canvasHeight);
+    const imageData = new ImageData(new Uint8ClampedArray(data), imgWidth, imgHeight);
     ctx.putImageData(imageData, 0, 0);
 
     genBtn.disabled = false;

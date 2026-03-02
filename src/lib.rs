@@ -108,20 +108,28 @@ pub fn generate_automaton_image(
     let dead_to = parse_hex_color(bg_to);
     let alive_from = parse_hex_color(fg_from);
     let alive_to = parse_hex_color(fg_to);
-    image_output::generations_to_rgba_buffer(
-        &generations_vec,
-        width,
-        generations,
-        scale,
-        alive_shape,
-        dead_shape,
-        use_links,
-        dead_from,
-        dead_to,
-        alive_from,
-        alive_to,
-        mirror_x,
-        mirror_y,
-        mirror_share_center,
-    )
+    {
+        let (buf, w, h) = image_output::generations_to_rgba_buffer(
+            &generations_vec,
+            width,
+            generations,
+            scale,
+            alive_shape,
+            dead_shape,
+            use_links,
+            dead_from,
+            dead_to,
+            alive_from,
+            alive_to,
+            mirror_x,
+            mirror_y,
+            mirror_share_center,
+        );
+        // Prepend width and height as 8 bytes (little-endian u32,u32) for the JS caller
+        let mut out = Vec::with_capacity(8 + buf.len());
+        out.extend_from_slice(&w.to_le_bytes());
+        out.extend_from_slice(&h.to_le_bytes());
+        out.extend_from_slice(&buf);
+        out
+    }
 }
