@@ -7,6 +7,18 @@ async function main() {
   const canvas = document.getElementById('output');
   const ctx = canvas.getContext('2d');
 
+  // Handle scale input disabling based on auto-scale checkbox
+  const scaleInput = document.getElementById('scale');
+  const autoScaleEl = document.getElementById('auto_scale');
+  if (scaleInput && autoScaleEl) {
+    // initialize disabled state
+    scaleInput.disabled = autoScaleEl.checked;
+    // toggle on change
+    autoScaleEl.addEventListener('change', () => {
+      scaleInput.disabled = autoScaleEl.checked;
+    });
+  }
+
   // Randomize button logic
   document.getElementById('randomize').onclick = () => {
     // Randomize rule
@@ -70,27 +82,13 @@ async function main() {
     }
     // Handle scale / auto-scale
     const scaleInput = document.getElementById('scale');
-    let scale = parseInt(scaleInput.value, 10);
+    let scale = scaleInput ? parseInt(scaleInput.value, 10) : 1;
     const autoScaleEl = document.getElementById('auto_scale');
     const auto_scale = autoScaleEl && autoScaleEl.checked;
-    // If auto-scale is enabled, compute and disable manual scale input
+    // If auto-scale is enabled, compute scale (input disabling handled elsewhere)
     if (auto_scale) {
       scale = Math.max(1, Math.round(2048 / width));
-      if (scaleInput) scaleInput.disabled = true;
-    } else {
-      if (scaleInput) scaleInput.disabled = false;
-    }
-    // Toggle disabled state when user checks/unchecks the box
-    if (autoScaleEl && scaleInput) {
-      autoScaleEl.addEventListener('change', () => {
-        if (autoScaleEl.checked) {
-          scaleInput.disabled = true;
-        } else {
-          scaleInput.disabled = false;
-        }
-      });
-    }
-    const alive_shape = document.getElementById('alive-shape').value;
+    }    const alive_shape = document.getElementById('alive-shape').value;
     const dead_shape = document.getElementById('dead-shape').value;
     const links = document.getElementById('links').checked;
     const mirror_x = document.getElementById('mirror_x').checked;
