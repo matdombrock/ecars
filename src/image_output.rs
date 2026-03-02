@@ -77,15 +77,19 @@ pub fn generations_to_rgba_buffer(
         buf[idx+3] = 255;
     };
 
-    for (y, gen) in generations.iter().enumerate() {
-        for (x, &cell) in gen.iter().enumerate() {
-            let fx = if width > 1 { x as f32 / (width - 1) as f32 } else { 0.0 };
-            let fy = if height > 1 { y as f32 / (height - 1) as f32 } else { 0.0 };
-            let t = (fx + fy) / 2.0;
-            let (color, shape) = if cell == 1 { (lerp_color(&alive_from, &alive_to, t), alive_shape) } else { (lerp_color(&dead_from, &dead_to, t), dead_shape) };
-            let base_x = x * scale;
-            let base_y = y * scale;
-            match shape {
+    // Two-pass draw: draw dead cells first, then alive cells on top to avoid overwriting shapes
+    for pass in 0..2 {
+        for (y, gen) in generations.iter().enumerate() {
+            for (x, &cell) in gen.iter().enumerate() {
+                // pass==0 -> draw dead cells (cell==0); pass==1 -> draw alive cells (cell==1)
+                if (pass == 0 && cell == 1) || (pass == 1 && cell == 0) { continue; }
+                let fx = if width > 1 { x as f32 / (width - 1) as f32 } else { 0.0 };
+                let fy = if height > 1 { y as f32 / (height - 1) as f32 } else { 0.0 };
+                let t = (fx + fy) / 2.0;
+                let (color, shape) = if cell == 1 { (lerp_color(&alive_from, &alive_to, t), alive_shape) } else { (lerp_color(&dead_from, &dead_to, t), dead_shape) };
+                let base_x = x * scale;
+                let base_y = y * scale;
+                match shape {
                 "square" => {
                     for dy in 0..scale {
                         for dx in 0..scale {
@@ -140,7 +144,7 @@ pub fn generations_to_rgba_buffer(
                         for dx in 0..scale {
                             let nx = (dx as f32 + 0.5) / scale as f32;
                             let ny = (dy as f32 + 0.5) / scale as f32;
-                            // pointing down: invert ny
+                            // pointing down: include if ny <= 1 - 2*abs(nx-0.5)
                             if ny <= 1.0 - 2.0 * (nx - 0.5).abs() {
                                 write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
                             }
@@ -152,8 +156,8 @@ pub fn generations_to_rgba_buffer(
                         for dx in 0..scale {
                             let nx = (dx as f32 + 0.5) / scale as f32;
                             let ny = (dy as f32 + 0.5) / scale as f32;
-                            // left-pointing isosceles: include if nx <= 2*abs(ny-0.5)
-                            if nx <= 2.0 * (ny - 0.5).abs() {
+                            // left-pointing isosceles: include if nx >= 2*abs(ny-0.5) (swapped)
+                            if nx >= 2.0 * (ny - 0.5).abs() {
                                 write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
                             }
                         }
@@ -164,8 +168,8 @@ pub fn generations_to_rgba_buffer(
                         for dx in 0..scale {
                             let nx = (dx as f32 + 0.5) / scale as f32;
                             let ny = (dy as f32 + 0.5) / scale as f32;
-                            // right-pointing
-                            if nx >= 1.0 - 2.0 * (ny - 0.5).abs() {
+                            // right-pointing (swap inequality)
+                            if nx <= 1.0 - 2.0 * (ny - 0.5).abs() {
                                 write_pixel(base_x + dx, base_y + dy, color, &mut src_buf);
                             }
                         }
@@ -230,6 +234,7 @@ pub fn generations_to_rgba_buffer(
                 }
             }
         }
+    }
     }
 
     // Draw links into src_buf if requested

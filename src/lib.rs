@@ -74,7 +74,6 @@ pub fn generate_automaton_image(
     fg_to: &str,
     mirror_x: bool,
     mirror_y: bool,
-    mirror_y: bool,
 ) -> Vec<u8> {
     let mut rng = seeded_small_rng(seed);
     let mut current = vec![0u8; width];
