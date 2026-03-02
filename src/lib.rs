@@ -74,7 +74,7 @@ pub fn generate_automaton_image(
     fg_to: &str,
     mirror_x: bool,
     mirror_y: bool,
-    mirror_share_center: bool,
+    mirror_y: bool,
 ) -> Vec<u8> {
     let mut rng = seeded_small_rng(seed);
     let mut current = vec![0u8; width];
@@ -123,7 +123,6 @@ pub fn generate_automaton_image(
             alive_to,
             mirror_x,
             mirror_y,
-            mirror_share_center,
         );
         // Prepend width and height as 8 bytes (little-endian u32,u32) for the JS caller
         let mut out = Vec::with_capacity(8 + buf.len());

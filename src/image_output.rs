@@ -25,7 +25,6 @@ pub fn save_generations_as_png(
     fg_to: Rgb<u8>,
     mirror_x: bool,
     mirror_y: bool,
-    mirror_share_center: bool,
 ) {
     let (buffer, img_width, img_height) = generations_to_rgba_buffer(
         generations,
@@ -41,7 +40,6 @@ pub fn save_generations_as_png(
         fg_to,
         mirror_x,
         mirror_y,
-        mirror_share_center,
     );
     let img: ImageBuffer<Rgba<u8>, _> = ImageBuffer::from_raw(img_width, img_height, buffer)
         .expect("Failed to create image buffer");
@@ -63,7 +61,6 @@ pub fn generations_to_rgba_buffer(
     alive_to: Rgb<u8>,
     mirror_x: bool,
     mirror_y: bool,
-    mirror_share_center: bool,
 ) -> (Vec<u8>, u32, u32) {
     // Render source buffer at original size
     let src_w = width * scale;
@@ -237,12 +234,12 @@ pub fn generations_to_rgba_buffer(
 
     // Draw links into src_buf if requested
     if use_links {
-        draw_links_bresenham_rgba(&mut src_buf, generations, width, height, scale, alive_from, alive_to, dead_from, dead_to, mirror_x, mirror_y, mirror_share_center);
+        draw_links_bresenham_rgba(&mut src_buf, generations, width, height, scale, alive_from, alive_to, dead_from, dead_to, mirror_x, mirror_y);
     }
 
-    // Determine destination size
-    let dst_w = if mirror_x { src_w * 2 - if mirror_share_center { scale } else { 0 } } else { src_w };
-    let dst_h = if mirror_y { src_h * 2 - if mirror_share_center { scale } else { 0 } } else { src_h };
+    // Determine destination size (no mirror_share_center support)
+    let dst_w = if mirror_x { src_w * 2 } else { src_w };
+    let dst_h = if mirror_y { src_h * 2 } else { src_h };
     let mut dst_buf = vec![0u8; dst_w * dst_h * 4];
 
     // Helper to copy pixel from src to dst
@@ -252,61 +249,22 @@ pub fn generations_to_rgba_buffer(
         d[didx..didx+4].copy_from_slice(&s[sidx..sidx+4]);
     };
 
-    // Helper to blend (average) two pixels in-place at dst
-    let blend_pixel_avg = |dx: usize, dy: usize, src_pixel: &[u8;4], d: &mut Vec<u8>| {
-        let didx = (dy * dst_w + dx) * 4;
-        for i in 0..4 {
-            let a = d[didx + i] as u16;
-            let b = src_pixel[i] as u16;
-            d[didx + i] = ((a + b) / 2) as u8;
-        }
-    };
-
-    // Blit src into dst and mirrored copies. If mirror_share_center is true, overlapping writes will be averaged.
+    // Blit src into dst and mirrored copies.
     for sy in 0..src_h {
         for sx in 0..src_w {
             // primary copy
             copy_pixel(sx, sy, sx, sy, &src_buf, &mut dst_buf);
             if mirror_x {
-                let mirror_offset_x = if mirror_share_center { src_w - scale } else { src_w };
-                let mx = mirror_offset_x + (src_w - 1 - sx);
-                if mx == sx && sy == sy {
-                    // same pixel, skip
-                } else if mirror_share_center {
-                    let sidx = (sy * src_w + sx) * 4;
-                    let src_pixel: [u8;4] = [src_buf[sidx], src_buf[sidx+1], src_buf[sidx+2], src_buf[sidx+3]];
-                    blend_pixel_avg(mx, sy, &src_pixel, &mut dst_buf);
-                } else {
-                    copy_pixel(sx, sy, mx, sy, &src_buf, &mut dst_buf);
-                }
+                let mx = src_w + (src_w - 1 - sx);
+                copy_pixel(sx, sy, mx, sy, &src_buf, &mut dst_buf);
             }
             if mirror_y {
-                let mirror_offset_y = if mirror_share_center { src_h - scale } else { src_h };
-                let my = mirror_offset_y + (src_h - 1 - sy);
-                if my == sy && sx == sx {
-                    // same pixel, skip
-                } else if mirror_share_center {
-                    let sidx = (sy * src_w + sx) * 4;
-                    let src_pixel: [u8;4] = [src_buf[sidx], src_buf[sidx+1], src_buf[sidx+2], src_buf[sidx+3]];
-                    blend_pixel_avg(sx, my, &src_pixel, &mut dst_buf);
-                } else {
-                    copy_pixel(sx, sy, sx, my, &src_buf, &mut dst_buf);
-                }
+                let my = src_h + (src_h - 1 - sy);
+                copy_pixel(sx, sy, sx, my, &src_buf, &mut dst_buf);
                 if mirror_x {
-                    // both axes: mirrored in both directions
-                    let mirror_offset_x = if mirror_share_center { src_w - scale } else { src_w };
-                    let mx = mirror_offset_x + (src_w - 1 - sx);
-                    let mirror_offset_y = if mirror_share_center { src_h - scale } else { src_h };
-                    let my = mirror_offset_y + (src_h - 1 - sy);
-                    if mx == sx && my == sy {
-                        // same pixel, skip
-                    } else if mirror_share_center {
-                        let sidx = (sy * src_w + sx) * 4;
-                        let src_pixel: [u8;4] = [src_buf[sidx], src_buf[sidx+1], src_buf[sidx+2], src_buf[sidx+3]];
-                        blend_pixel_avg(mx, my, &src_pixel, &mut dst_buf);
-                    } else {
-                        copy_pixel(sx, sy, mx, my, &src_buf, &mut dst_buf);
-                    }
+                    let mx = src_w + (src_w - 1 - sx);
+                    let my = src_h + (src_h - 1 - sy);
+                    copy_pixel(sx, sy, mx, my, &src_buf, &mut dst_buf);
                 }
             }
         }
@@ -330,7 +288,6 @@ fn draw_links_bresenham_rgba(
     bg_to: Rgb<u8>,
     mirror_x: bool,
     mirror_y: bool,
-    _mirror_share_center: bool,
 ) {
     let thickness = ((scale as i32) / 8).max(1);
     let img_width = (width * scale) as i32;

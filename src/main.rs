@@ -73,9 +73,6 @@ struct Args {
     /// Mirror vertically (flip top-bottom)
     #[arg(long, default_value_t = false)]
     mirror_y: bool,
-    /// When mirroring, share the center row/column instead of duplicating it
-    #[arg(long, default_value_t = false)]
-    mirror_share_center: bool,
 }
 
 fn parse_hex_color(s: &str) -> Rgb<u8> {
@@ -126,7 +123,6 @@ fn main() {
             alive_to,
             args.mirror_x,
             args.mirror_y,
-            args.mirror_share_center,
         );
     } else if args.pretty_print {
         for gen in generations_vec {

@@ -74,7 +74,7 @@ async function main() {
     const links = document.getElementById('links').checked;
     const mirror_x = document.getElementById('mirror_x').checked;
     const mirror_y = document.getElementById('mirror_y').checked;
-    const mirror_share_center = document.getElementById('mirror_share_center').checked;
+    // mirror_share_center removed; no-op
     const dead_color_from = document.getElementById('dead_color_from').value;
     const dead_color_to = document.getElementById('dead_color_to').value;
     const alive_color_from = document.getElementById('alive_color_from').value;
@@ -105,8 +105,7 @@ async function main() {
       alive_color_from,
       alive_color_to,
       mirror_x,
-      mirror_y,
-      mirror_share_center
+      mirror_y
     );
 
     // fullBuf is a Uint8Array with first 8 bytes = [width_le_u32, height_le_u32]
