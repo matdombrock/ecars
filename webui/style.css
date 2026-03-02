@@ -334,6 +334,15 @@ button {
   font-family: 'Agave', monospace;
 }
 
+/* Visual for disabled inputs */
+.form-row input:disabled,
+.form-row select:disabled {
+  opacity: 0.45;
+  background: #2b2b2b;
+  color: #777;
+  border-color: #3a3a3a;
+}
+
 
 
 
