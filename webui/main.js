@@ -68,12 +68,27 @@ async function main() {
     if (randomDistStr !== '') {
       random_distribution = parseFloat(randomDistStr);
     }
-    let scale = parseInt(document.getElementById('scale').value, 10);
+    // Handle scale / auto-scale
+    const scaleInput = document.getElementById('scale');
+    let scale = parseInt(scaleInput.value, 10);
     const autoScaleEl = document.getElementById('auto_scale');
     const auto_scale = autoScaleEl && autoScaleEl.checked;
+    // If auto-scale is enabled, compute and disable manual scale input
     if (auto_scale) {
-      // Compute scale so final image width ~2048px
       scale = Math.max(1, Math.round(2048 / width));
+      if (scaleInput) scaleInput.disabled = true;
+    } else {
+      if (scaleInput) scaleInput.disabled = false;
+    }
+    // Toggle disabled state when user checks/unchecks the box
+    if (autoScaleEl && scaleInput) {
+      autoScaleEl.addEventListener('change', () => {
+        if (autoScaleEl.checked) {
+          scaleInput.disabled = true;
+        } else {
+          scaleInput.disabled = false;
+        }
+      });
     }
     const alive_shape = document.getElementById('alive-shape').value;
     const dead_shape = document.getElementById('dead-shape').value;
