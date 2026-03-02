@@ -29,8 +29,9 @@ This project implements an elementary cellular automaton engine in Rust, with bo
 - CLI: Generates PNG images and/or pretty-prints automaton generations to the terminal.
 - Web UI: Renders automaton images in-browser and allows image download.
 
-## CLI Usage
+---
 
+## CLI Usage
 
 Build the CLI:
 
@@ -47,33 +48,37 @@ Run the CLI:
 ### Options
 
 - `--rule <u8>`: Rule number (0–255)
-- `--random_distribution <float>`: Probability for random initial state (0.0–1.0), or 'none' for single center cell
-- `--width <usize>`: Automaton width (default: 64)
-- `--generations <usize>`: Number of generations (default: 32)
+- `--random-distribution <float|none>` (short `-d`): Probability for random initial state (0.0–1.0), or `none` for a single center cell (default: `none`).
+- `--width <usize>` (short `-w`): Automaton width (default: 64)
+- `--generations <usize>` (short `-g`): Number of generations to run (default: 32)
 - `--seed <u64>`: Random seed (optional, for reproducibility)
-- `--pretty_print`: Pretty print generations (default: true)
-- `--alive-shape <shape>`: Shape to use for alive cells in PNG output (`square`, `circle`, `circle-small`, `triangle-up`, `triangle-down`, `triangle-left`, `triangle-right`, `triangle-r-a`, `triangle-r-b`, `triangle-r-c`, `triangle-r-d`). Default: `square`
-- `--dead-shape <shape>`: Shape to use for dead cells in PNG output (same options as above, including `circle-small`). Default: `square`
-- `--alive-color-from <hex>`: Start color for alive cells (default: #000000)
-- `--alive-color-to <hex>`: End color for alive cells (default: #aaffff)
-- `--dead-color-from <hex>`: Start color for dead cells (default: #ffaaff)
-- `--dead-color-to <hex>`: End color for dead cells (default: #000000)
-- `--links`: Draw links between cells
-- `--scale <usize>`: Scale factor for PNG output (default: 1)
-- `--auto-scale`: If set, compute scale so the final image width is as close to 2048px as possible (overrides --scale)
-- `--output <file>`: Output PNG file (optional)
-- `--bg_from <hex>`: Background color start (default: #ffaaff)
-- `--bg_to <hex>`: Background color end (default: #000000)
-- `--fg_from <hex>`: Foreground color start (default: #000000)
-- `--fg_to <hex>`: Foreground color end (default: #aaffff)
+- `--pretty_print` (short `-p`): Pretty print generations (prints block characters). Default: true. Use `--pretty_print=false` to disable.
 
-- `--mirror-x`: Mirror image horizontally (flip left-right)
-- `--mirror-y`: Mirror image vertically (flip top-bottom)
+Image / PNG options:
+- `--alive-shape <shape>`: Shape to use for alive cells in PNG output. Default: `square`.
+- `--dead-shape <shape>`: Shape to use for dead cells in PNG output. Default: `square`.
+- `--alive-color-from <#RRGGBB>`: Start color for alive cells (hex `#RRGGBB`, required 6 hex digits). Default: `#000000`.
+- `--alive-color-to <#RRGGBB>`: End color for alive cells. Default: `#aaffff`.
+- `--dead-color-from <#RRGGBB>`: Start color for dead cells. Default: `#ffaaff`.
+- `--dead-color-to <#RRGGBB>`: End color for dead cells. Default: `#000000`.
+- `--links`: Draw links between neighboring cells of the same state (post-processing; default: off). Links are drawn using Bresenham lines between cell centers and inherit a gradient-based color.
+- `--scale <usize>` (short `-s`): Scale factor for PNG output (each logical cell becomes scale × scale pixels). Default: 1.
+- `--auto-scale`: If set, compute an effective scale so the final image width is as close to 2048px as possible. When `--auto-scale` is used it overrides `--scale`.
+- `--output <file>` (short `-o`): Output PNG file path. If omitted, the program prints to stdout (or pretty-prints the generations when `--pretty_print` is true).
+- `--mirror-x`: Mirror image horizontally (creates a mirrored copy to the right, effectively doubling output width).
+- `--mirror-y`: Mirror image vertically (creates a mirrored copy below, effectively doubling output height).
+
+Notes about colors and formats:
+- Hex colors must be full 6-digit form `#RRGGBB`. The CLI enforces exactly 6 hex digits (e.g. `#ffaaff`).
+
+Notes about links and scale:
+- Link thickness is computed from `scale` as `max(scale/8, 1)` (integer division), so larger scales produce thicker link lines.
+- When `--auto-scale` is enabled, the code computes an integer scale to approximate a 2048px width for the logical width, then uses that scale for rendering (this overrides any explicit `--scale`).
 
 Example:
 
 ```bash
-./target/release/ca --rule 110 --random_distribution 0.5 --width 128 --generations 64 --seed 123456 --output automaton.png --bg_from "#ffaaff" --bg_to "#000000" --fg_from "#000000" --fg_to "#aaffff"
+./target/release/ca --rule 110 --random-distribution 0.5 --width 128 --generations 64 --seed 123456 --output automaton.png --alive-color-from "#000000" --alive-color-to "#aaffff" --dead-color-from "#ffaaff" --dead-color-to "#000000" --auto-scale
 ```
 
 ---
@@ -90,12 +95,11 @@ Open the web interface:
 
 - Open `webui/index.html` in your browser.
 
-### Features
+### Web UI Features
 
 - Set rule, random distribution, width, generations, scale, circle mode, colors, and seed.
-- Click **Randomize** to generate new parameters and a random seed (results are reproducible).
+- Click **Randomize** to generate new parameters and a random seed (results are reproducible with the seed).
 - Click **Generate** to run the automaton and view the image.
-- All parameters are adjustable; the seed ensures reproducibility.
 
 ---
 
@@ -116,3 +120,7 @@ pub fn run_automaton(
 - Returns a flat vector of cell states for all generations.
 - Uses deterministic random number generation if a seed is provided.
 - Exposed to WASM via `wasm-bindgen` for web UI integration.
+
+---
+
+If you'd like, I can also produce a one-line example demonstrating `--auto-scale` vs `--scale`, or show a unified diff of this change. I will not make any git commits unless you explicitly ask.
